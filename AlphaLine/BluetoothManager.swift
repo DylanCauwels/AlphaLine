@@ -20,7 +20,7 @@ let BLE_Rx_Characteristic_CBUUID = CBUUID(string: "6e400003-b5a3-f393-e0a9-e50e2
 let Rx_Start = Character("{")
 let Rx_End = Character("}")
 
-class BTManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
+class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     // Core BT member vars
     var centralManager: CBCentralManager?
@@ -38,6 +38,12 @@ class BTManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         // concurrent queue for background tasks
         let centralQueue = DispatchQueue(label: "com.example.centralQueueName", attributes: .concurrent)
         self.centralManager = CBCentralManager(delegate: self, queue: centralQueue)
+    }
+    
+    init(view: ViewController, centralManager: CBCentralManager) {
+        self.view = view
+        self.centralManager = centralManager
+        super.init()
     }
     
     // MARK: - CBCentralManagerDelegate methods
