@@ -16,7 +16,7 @@ let dummyStr = "{1,2,3,4,5,6}"
 
 class ViewController: UIViewController {
     
-    var bleManager: BTManager?
+    var btManager: BluetoothManager?
     
     @IBAction func buttonPressed(_ sender: Any) {
         writeData([Double(arc4random()),Double(arc4random()), Double(arc4random()), Double(arc4random()), Double(arc4random()), Double(arc4random())])
@@ -28,7 +28,7 @@ class ViewController: UIViewController {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.bleManager = BTManager(view: self)
+        self.btManager = BluetoothManager(view: self)
     }
         
     func convertArrtoString(array: Array<Double>) -> String {
