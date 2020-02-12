@@ -16,39 +16,145 @@ let BLE_UART_Service_CBUUID = CBUUID(string: "6e400001-b5a3-f393-e0a9-e50e24dcca
 let BLE_Tx_Characteristic_CBUUID = CBUUID(string: "6e400002-b5a3-f393-e0a9-e50e24dcca9e")
 let BLE_Rx_Characteristic_CBUUID = CBUUID(string: "6e400003-b5a3-f393-e0a9-e50e24dcca9e")
 
-let Rx_Start = Character("{")
-let Rx_End = Character("}")
-
-// order of sensor locations as sent by peripheral
-let Locations = ["A1", "A2", "A3", "A4", "Left", "Right"]
-
+// MARK: - Main Storyboard
 class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
     
-    // MARK: - Core BT member vars
-    var centralManager: CBCentralManager?
-    var peripheralDevice: CBPeripheral?
     
-    var angles = Dictionary<String, Float>()
-    var buffer: Data?
+    // MARK: Bluetooth Subview
+    @IBOutlet weak var BTView: UIView!
+    @IBOutlet weak var BTSubview: UIView!
+    @IBOutlet weak var BTSymbol: UIImageView!
+    @IBOutlet weak var loadingMessage: UILabel!
+    @IBOutlet weak var progressBar: UIProgressView!
+    var iconTimer: Timer?
     
-    @IBAction func buttonPressed(_ sender: Any) {
-        writeData(data: [Double(arc4random()),Double(arc4random()), Double(arc4random()), Double(arc4random()), Double(arc4random()), Double(arc4random())])
+    func formatBT() {
+        formatBTView()
+        formatBTImage()
     }
     
-    @IBOutlet weak var DataLabel: UILabel!
+    func formatBTView() {
+        // BT view border
+        self.BTView.layer.borderWidth = 2
+        self.BTView.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
+        self.BTView.layer.cornerRadius = 10
+        // Progress bar init
+        progressBar.setProgress(0.0, animated: false)
+    }
     
-    @IBOutlet weak var textbox: UITextView!
-        
-    func convertArrtoString(array: Array<Double>) -> String {
-        var returnable = "["
-        for value in array {
-            returnable = returnable + String(value) + ","
+    func formatBTImage() {
+        let imageConfiguration = UIImage.SymbolConfiguration(scale: .large)
+        BTSymbol.image = UIImage(systemName: "dot.radiowaves.left.and.right", withConfiguration: imageConfiguration)?.withTintColor(.gray, renderingMode: .alwaysOriginal)
+        BTSymbol.alpha = 1.0
+        iconTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: nil, repeats: true)
+    }
+    
+    @objc func blink() {
+        if BTSymbol.alpha == 1.0 {
+            UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
+                self.BTSymbol.alpha = 0.0
+            }, completion: nil)
+        } else {
+            UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseIn, animations: {
+                self.BTSymbol.alpha = 1.0
+            }, completion: nil)
         }
-        return returnable + "]"
     }
     
+    var State: PairingState?
+    enum PairingState {
+        case searching, found, connecting, paired, transitioned, completed;
+    }
+    var deviceName: String?
+    
+    func changeState() {
+        if let state: PairingState = State {
+            switch state {
+                case .searching:
+                    progressBar.setProgress(0.1, animated: true)
+                    loadingMessage.text = "Searching..."
+                case .found:
+                    progressBar.setProgress(0.3, animated: true)
+                    loadingMessage.text = "Device Found"
+                case .connecting:
+                    progressBar.setProgress(0.6, animated: true)
+                    loadingMessage.text = "Connecting..."
+                case .paired:
+                    progressBar.setProgress(1.0, animated: true)
+                    loadingMessage.text = "Paired"
+                    // stop timer and fade out old image for replacement
+                    iconTimer?.invalidate()
+                    if BTSymbol.alpha == 1.0 {
+                        blink()
+                        //TODO: add wait to ensure first blink finishes
+                    }
+                    // can add image configuration if necessary
+                    BTSymbol.image = UIImage(systemName: "dot.radiowaves.left.and.right")
+                    blink()
+                case .transitioned:
+                    progressBar.removeFromSuperview()
+                    if let device = deviceName {
+                        loadingMessage.text = device
+                    } else {
+                        loadingMessage.text = "AlphaLine Prototype v1.12"
+                    }
+                    //TODO: have the Subview resize instead of just centering the content within the adjusted content subview
+                    BTSubview.center = CGPoint(x: BTView.frame.size.width  / 2, y: BTView.frame.size.height / 2)
+            case .completed:
+                print("finished")
+            }
+        }
+    }
+    
+    
+   // MARK: Testing Subview
+    @IBOutlet weak var testView: UIView!
+    
+    @IBAction func testBT(_ sender: Any) {
+        if let state = State {
+            switch state {
+            case .searching:
+                State = .found
+            case .found:
+                State = .connecting
+            case .connecting:
+                State = .paired
+            case .paired:
+                State = .transitioned
+            case .transitioned:
+                State = .transitioned
+            case .completed:
+                print("")
+            }
+        } else {
+            State = .searching
+        }
+        changeState()
+    }
+    
+    @IBAction func testData(_ sender: Any) {
+        writeData(data: arc4random())
+    }
+    
+    func formatTesting() {
+        self.testView.layer.borderWidth = 2
+        self.testView.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
+        self.testView.layer.cornerRadius = 10
+    }
+    
+    // MARK: Network Display Subview
+    @IBOutlet weak var dataLabel: UILabel!
+    @IBOutlet weak var textbox: UITextView!
+    @IBOutlet weak var dataView: UIView!
+
+    func formatNetwork() {
+        dataLabel.font = dataLabel.font.withSize(20)
+        self.dataView.layer.borderWidth = 2
+        self.dataView.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
+        self.dataView.layer.cornerRadius = 10
+    }
     // writes data to the textbox with datetime
-    func writeData(data:Array<Double>) {
+    func writeData(data:UInt32) {
         let date = Date()
         let calendar = Calendar.current
         let hour = calendar.component(.hour, from: date)
@@ -57,9 +163,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         
         // compiling message
         let datetime: String = String(hour) + ":" + String(minutes) + ":" + String(seconds)
-        let received: String = "\nData: " + convertArrtoString(array: [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]) + " \n\tReceived At: " + datetime
-        let text: String = textbox.text
-        textbox.text =  received + text
+        let received: String = "\nData: " + String(data) + " \n\tReceived At: " + datetime
+        writeMessage(message: received)
     }
     
     // writes message to the textbox
@@ -67,13 +172,21 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         textbox.text = message + textbox.text
     }
     
+    
+    // MARK: - Core BT member vars
+    var centralManager: CBCentralManager?
+    var peripheralDevice: CBPeripheral?
+    
+    // MARK: - Main
     override func viewDidLoad() {
         // gives access to main view property before its on screen
         super.viewDidLoad()
-        /// UI Commands
-        DataLabel.font = DataLabel.font.withSize(20)
+        // UI Commands
+        formatBT()
+        formatTesting()
+        formatNetwork()
         
-        /// BLE Commands
+        // BLE Commands
         // concurrent queue for background tasks
         let centralQueue = DispatchQueue(label: "com.example.centralQueueName", attributes: .concurrent)
         // delegate central manager
@@ -82,7 +195,6 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     
 
     // MARK: - CBCentralManagerDelegate methods
-    
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
     
@@ -110,7 +222,6 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             
             // scan for peripherals with our service
             centralManager?.scanForPeripherals(withServices: [BLE_UART_Service_CBUUID])
-            
         }
     }
     
@@ -183,7 +294,9 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     // read updated values
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
            if characteristic.uuid == BLE_Rx_Characteristic_CBUUID {
-               cacheData(data: characteristic.value)
+               
+           // TODO: decode transmitted data
+                print(characteristic.value)
             
                DispatchQueue.main.async { () -> Void in
                    // TODO: -update UI
@@ -206,32 +319,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
     }
     
-    func cacheData(data: Data?) {
-        if data![data!.startIndex] == Rx_Start.asciiValue {
-            buffer = data
-        }
-        else {
-            buffer?.append(data!)
-        }
-        if data![data!.endIndex - 1] == Rx_End.asciiValue {
-            decodeRx()
-        }
-    }
-    
-    func decodeRx() {
-        if let buffer = buffer {
-            var data: String! = String(data: buffer, encoding: .utf8)
-            // trim leading and trailing brackets
-            data.removeFirst()
-            data.removeLast()
-            
-            let angleArr = data.components(separatedBy: ",")
-            
-            for i in 0..<angleArr.endIndex {
-                let angle = Float(angleArr[i])
-                print("\(Locations[i]): \(angle!) degrees")
-                angles[Locations[i]] = Float(angleArr[i])
-            }
-        }
+    // TODO: -change this
+    func decodeRx(msg: String) {
+        print(msg);
     }
 }
