@@ -18,8 +18,36 @@ let BLE_Rx_Characteristic_CBUUID = CBUUID(string: "6e400003-b5a3-f393-e0a9-e50e2
 
 // MARK: - Main Storyboard
 class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
+    let imageConfiguration = UIImage.SymbolConfiguration(scale: .medium)
     
+    func stopTimer(timer: Timer) {
+        if timer.isValid {
+            timer.invalidate()
+        }
+    }
     
+    func getSymbol(color: UIColor, symbol: String) -> UIImage {
+        return (UIImage(systemName: symbol, withConfiguration: imageConfiguration)?.withTintColor(color, renderingMode: .alwaysOriginal))!
+    }
+    
+    func formatView(view: UIView) {
+        view.layer.borderWidth = 2
+        view.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
+        view.layer.cornerRadius = 10
+    }
+    
+    @objc func blink(timer: Timer) {
+        let symbol: UIImageView = timer.userInfo as! UIImageView
+        if symbol.alpha == 1.0 {
+            UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
+                symbol.alpha = 0.0
+            }, completion: nil)
+        } else {
+            UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseIn, animations: {
+                symbol.alpha = 1.0
+            }, completion: nil)
+        }
+    }
     // MARK: Bluetooth Subview
     @IBOutlet weak var BTView: UIView!
     @IBOutlet weak var BTSubview: UIView!
@@ -29,9 +57,11 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     var iconTimer: Timer?
     
     func formatBT() {
-        formatBTView()
-        formatBTImage()
+        formatView(view: BTView)
+        formatBTImage(color: .gray)
+        progressBar.progress = 0.0
     }
+    
     
     func formatBTView() {
         // BT view border
@@ -42,35 +72,24 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         progressBar.setProgress(0.0, animated: false)
     }
     
-    func formatBTImage() {
-        let imageConfiguration = UIImage.SymbolConfiguration(scale: .large)
-        BTSymbol.image = UIImage(systemName: "dot.radiowaves.left.and.right", withConfiguration: imageConfiguration)?.withTintColor(.gray, renderingMode: .alwaysOriginal)
+    func formatBTImage(color: UIColor) {
+        BTSymbol.image = getSymbol(color: color, symbol: "dot.radiowaves.left.and.right")
         BTSymbol.alpha = 1.0
-        iconTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: nil, repeats: true)
     }
     
-    @objc func blink() {
-        if BTSymbol.alpha == 1.0 {
-            UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
-                self.BTSymbol.alpha = 0.0
-            }, completion: nil)
-        } else {
-            UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseIn, animations: {
-                self.BTSymbol.alpha = 1.0
-            }, completion: nil)
-        }
-    }
-    
-    var State: PairingState?
+    var BTState: PairingState?
     enum PairingState {
-        case searching, found, connecting, paired, transitioned, completed;
+        case searching, found, connecting, paired, transitioned, healthy, reconnecting, error;
     }
     var deviceName: String?
     
-    func changeState() {
-        if let state: PairingState = State {
+    // TODO: refactor method to produce symbol with diff colors
+    func changeBTState() {
+        if let state: PairingState = BTState {
             switch state {
                 case .searching:
+                    // TODO: be able to re-add progress bar
+                    iconTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: self.BTSymbol, repeats: true)
                     progressBar.setProgress(0.1, animated: true)
                     loadingMessage.text = "Searching..."
                 case .found:
@@ -85,12 +104,15 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
                     // stop timer and fade out old image for replacement
                     iconTimer?.invalidate()
                     if BTSymbol.alpha == 1.0 {
-                        blink()
-                        //TODO: add wait to ensure first blink finishes
+                        UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
+                            self.BTSymbol.alpha = 0.0
+                        }, completion: {(finished:Bool) in
+                            self.formatBTImage(color: .systemBlue)
+                            UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
+                              self.BTSymbol.alpha = 1.0
+                            }, completion: nil)
+                        })
                     }
-                    // can add image configuration if necessary
-                    BTSymbol.image = UIImage(systemName: "dot.radiowaves.left.and.right")
-                    blink()
                 case .transitioned:
                     progressBar.removeFromSuperview()
                     if let device = deviceName {
@@ -100,36 +122,114 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
                     }
                     //TODO: have the Subview resize instead of just centering the content within the adjusted content subview
                     BTSubview.center = CGPoint(x: BTView.frame.size.width  / 2, y: BTView.frame.size.height / 2)
-            case .completed:
-                print("finished")
+                    BTState = .healthy
+            case .healthy:
+                stopTimer(timer: iconTimer!)
+                formatBTImage(color: .systemBlue)
+            case .reconnecting:
+                formatBTImage(color: .systemYellow)
+                iconTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: self.BTSymbol, repeats: true)
+            case .error:
+                stopTimer(timer: iconTimer!)
+                formatBTImage(color: .systemGray)
             }
         }
     }
     
     
-   // MARK: Testing Subview
+    // MARK: Battery Subview
+    @IBOutlet weak var batteryView: UIView!
+    @IBOutlet weak var batteryImage: UIImageView!
+    
+    var batteryTimer: Timer?
+    
+    // TODO: refactor into single border change method
+    func formatBattery() {
+        formatBatteryView()
+        formatBatteryImage(color: .systemGray, symbol: "battery.100")
+    }
+    
+    func formatBatteryView() {
+        self.batteryView.layer.borderWidth = 2
+        self.batteryView.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
+        self.batteryView.layer.cornerRadius = 10
+    }
+    
+    func formatBatteryImage(color: UIColor, symbol: String) {
+        batteryImage.image = getSymbol(color: color, symbol: symbol)
+        batteryImage.alpha = 1.0
+    }
+    
+    enum BatteryState {
+        case searching, high, low, dead;
+    }
+    var batteryState: BatteryState?
+    func changeBatteryState () {
+        if let state = batteryState {
+            switch state {
+            case .searching:
+                formatBatteryImage(color: .systemGray, symbol: "battery.100")
+                batteryTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: self.batteryImage, repeats: true)
+            case .high:
+                stopTimer(timer: batteryTimer!)
+                formatBatteryImage(color: .green, symbol: "battery.100")
+            case .low:
+                formatBatteryImage(color: .orange, symbol: "battery.25")
+                batteryTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: self.batteryImage, repeats: true)
+            case .dead:
+                stopTimer(timer: batteryTimer!)
+                formatBatteryImage(color: .red, symbol: "battery.0")
+            }
+        } else {
+            print("battery state uninitialized")
+        }
+    }
+    
+    // MARK: Testing Subview
     @IBOutlet weak var testView: UIView!
     
     @IBAction func testBT(_ sender: Any) {
-        if let state = State {
+        if let state = BTState {
             switch state {
             case .searching:
-                State = .found
+                BTState = .found
             case .found:
-                State = .connecting
+                BTState = .connecting
             case .connecting:
-                State = .paired
+                BTState = .paired
             case .paired:
-                State = .transitioned
+                BTState = .transitioned
             case .transitioned:
-                State = .transitioned
-            case .completed:
-                print("")
+                BTState = .healthy
+            case .healthy:
+                BTState = .reconnecting
+            case .reconnecting:
+                BTState = .error
+            case .error:
+                BTState = .healthy
             }
         } else {
-            State = .searching
+            BTState = .searching
         }
-        changeState()
+        changeBTState()
+    }
+    
+    @IBAction func testBattery(_ sender: Any) {
+        if let state = batteryState {
+            switch state {
+            case .searching:
+                batteryState = .high
+            case .high:
+                batteryState = .low
+            case .low:
+                batteryState = .dead
+            case .dead:
+                batteryState = .searching
+            }
+        } else {
+            batteryState = .searching
+        }
+        changeBatteryState()
     }
     
     @IBAction func testData(_ sender: Any) {
@@ -144,7 +244,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     
     // MARK: Network Display Subview
     @IBOutlet weak var dataLabel: UILabel!
-    @IBOutlet weak var textbox: UITextView!
+    @IBOutlet weak var dataBox: UITextView!
     @IBOutlet weak var dataView: UIView!
 
     func formatNetwork() {
@@ -152,6 +252,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         self.dataView.layer.borderWidth = 2
         self.dataView.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
         self.dataView.layer.cornerRadius = 10
+        
+        self.dataBox.layer.cornerRadius = 5
     }
     // writes data to the textbox with datetime
     func writeData(data:UInt32) {
@@ -167,9 +269,9 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         writeMessage(message: received)
     }
     
-    // writes message to the textbox
+    // writes message to the dataBox
     func writeMessage(message: String) {
-        textbox.text = message + textbox.text
+        dataBox.text = message + dataBox.text
     }
     
     
@@ -183,6 +285,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         super.viewDidLoad()
         // UI Commands
         formatBT()
+        formatBattery()
         formatTesting()
         formatNetwork()
         
