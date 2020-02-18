@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="pIT-Aw-WB7">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
@@ -7,16 +7,16 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Item 3-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="AlphaLine" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" userLabel="Item 3" customClass="ViewController" customModule="AlphaLine" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="62" translatesAutoresizingMaskIntoConstraints="NO" id="GUE-X3-cwg">
-                                <rect key="frame" x="16" y="44" width="341" height="726"/>
+                                <rect key="frame" x="16" y="44" width="341" height="677"/>
                                 <subviews>
                                     <view contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="s1T-h1-f9t">
                                         <rect key="frame" x="0.0" y="0.0" width="341" height="73"/>
@@ -91,7 +91,7 @@
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A9K-D3-uzM">
-                                        <rect key="frame" x="0.0" y="426" width="341" height="300"/>
+                                        <rect key="frame" x="0.0" y="426" width="341" height="251"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Data" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iTt-MX-jhz">
                                                 <rect key="frame" x="96" y="8" width="150" height="20"/>
@@ -101,7 +101,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Cia-Z9-Psw">
-                                                <rect key="frame" x="8" y="36" width="325" height="244"/>
+                                                <rect key="frame" x="8" y="36" width="325" height="207"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -128,6 +128,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Device" image="wifi" catalog="system" id="6Ug-0k-Tff" userLabel="Home"/>
                     <connections>
                         <outlet property="BTSubview" destination="ej8-Hc-xBM" id="kxl-iV-Nc7"/>
                         <outlet property="BTSymbol" destination="4Yh-rN-eac" id="gkL-Rh-4mH"/>
@@ -145,13 +146,73 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="ldy-St-Rcw">
                     <connections>
-                        <segue destination="5yo-L6-Jqv" kind="popoverPresentation" popoverAnchorView="s1T-h1-f9t" id="epH-5Q-lLc">
-                            <popoverArrowDirection key="popoverArrowDirection" left="YES"/>
-                        </segue>
+                        <segue destination="5yo-L6-Jqv" kind="presentation" modalPresentationStyle="formSheet" id="epH-5Q-lLc"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="136.80000000000001" y="137.4384236453202"/>
+            <point key="canvasLocation" x="525.60000000000002" y="-103.44827586206897"/>
+        </scene>
+        <!--Start Routine-->
+        <scene sceneID="sme-Lt-RrA">
+            <objects>
+                <viewController id="9FU-O9-Xon" customClass="CustomViewController" customModule="AlphaLine" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="NDf-eg-wqT">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q0v-n7-2D3" customClass="BackView" customModule="AlphaLine" customModuleProvider="target">
+                                <rect key="frame" x="67" y="271" width="240" height="270"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="WeB-RT-XQ3"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Start Routine" image="plus" catalog="system" id="O10-ej-bxT"/>
+                    <connections>
+                        <outlet property="backDisplay" destination="q0v-n7-2D3" id="WAs-GM-EyL"/>
+                        <outlet property="backView" destination="q0v-n7-2D3" id="ioG-Im-dZy"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="G2J-sf-tD9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="525.60000000000002" y="681.2807881773399"/>
+        </scene>
+        <!--History-->
+        <scene sceneID="b2h-Xs-UWf">
+            <objects>
+                <viewController id="Mbc-cW-mXO" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dy6-yU-RFq">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="sCd-04-kGw"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="History" image="clock" catalog="system" id="e6X-FE-utK"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ADP-Hi-wDy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="525.60000000000002" y="-836.45320197044339"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="dQh-Xb-afa">
+            <objects>
+                <tabBarController id="pIT-Aw-WB7" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="O4e-9G-09a">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="d5F-Xx-SeF"/>
+                        <segue destination="9FU-O9-Xon" kind="relationship" relationship="viewControllers" id="oJd-hc-JhM"/>
+                        <segue destination="Mbc-cW-mXO" kind="relationship" relationship="viewControllers" id="7aq-pa-rQu"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="h5n-3r-PBv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-639" y="-102"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="Zc6-JP-Kwk">
@@ -213,7 +274,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yx4-6z-nBX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="949.60000000000002" y="136.69950738916256"/>
+            <point key="canvasLocation" x="1775" y="-103"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="clock" catalog="system" width="64" height="60"/>
+        <image name="plus" catalog="system" width="64" height="56"/>
+        <image name="wifi" catalog="system" width="64" height="46"/>
+    </resources>
 </document>

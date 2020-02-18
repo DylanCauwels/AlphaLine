@@ -15,6 +15,9 @@
 		EBC31E3A23EB637600D4AAE6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBC31E3823EB637600D4AAE6 /* LaunchScreen.storyboard */; };
 		EBC31E4523EB637600D4AAE6 /* AlphaLineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E4423EB637600D4AAE6 /* AlphaLineTests.swift */; };
 		EBC31E5023EB637600D4AAE6 /* AlphaLineUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E4F23EB637600D4AAE6 /* AlphaLineUITests.swift */; };
+		EBC31E5E23F62ED500D4AAE6 /* BackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E5D23F62ED500D4AAE6 /* BackView.swift */; };
+		EBC31E6423F896A300D4AAE6 /* CustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E6323F896A300D4AAE6 /* CustomViewController.swift */; };
+		EBC31E6623FB1D5000D4AAE6 /* DataHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E6523FB1D5000D4AAE6 /* DataHub.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +52,9 @@
 		EBC31E4B23EB637600D4AAE6 /* AlphaLineUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlphaLineUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBC31E4F23EB637600D4AAE6 /* AlphaLineUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlphaLineUITests.swift; sourceTree = "<group>"; };
 		EBC31E5123EB637600D4AAE6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EBC31E5D23F62ED500D4AAE6 /* BackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackView.swift; sourceTree = "<group>"; };
+		EBC31E6323F896A300D4AAE6 /* CustomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewController.swift; sourceTree = "<group>"; };
+		EBC31E6523FB1D5000D4AAE6 /* DataHub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataHub.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +105,9 @@
 		EBC31E2C23EB637400D4AAE6 /* AlphaLine */ = {
 			isa = PBXGroup;
 			children = (
+				EBC31E6323F896A300D4AAE6 /* CustomViewController.swift */,
+				EBC31E5D23F62ED500D4AAE6 /* BackView.swift */,
+				EBC31E6523FB1D5000D4AAE6 /* DataHub.swift */,
 				EBC31E2D23EB637400D4AAE6 /* AppDelegate.swift */,
 				EBC31E2F23EB637400D4AAE6 /* SceneDelegate.swift */,
 				EBC31E3123EB637400D4AAE6 /* ViewController.swift */,
@@ -260,6 +269,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				EBC31E3223EB637400D4AAE6 /* ViewController.swift in Sources */,
+				EBC31E6423F896A300D4AAE6 /* CustomViewController.swift in Sources */,
+				EBC31E5E23F62ED500D4AAE6 /* BackView.swift in Sources */,
+				EBC31E6623FB1D5000D4AAE6 /* DataHub.swift in Sources */,
 				EBC31E2E23EB637400D4AAE6 /* AppDelegate.swift in Sources */,
 				EBC31E3023EB637400D4AAE6 /* SceneDelegate.swift in Sources */,
 			);

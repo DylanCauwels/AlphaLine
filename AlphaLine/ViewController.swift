@@ -18,7 +18,7 @@ let BLE_Rx_Characteristic_CBUUID = CBUUID(string: "6e400003-b5a3-f393-e0a9-e50e2
 
 // MARK: - Main Storyboard
 class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
-    let imageConfiguration = UIImage.SymbolConfiguration(scale: .medium)
+    let imageConfiguration = UIImage.SymbolConfiguration(scale: .small)
     
     func stopTimer(timer: Timer) {
         if timer.isValid {
@@ -48,6 +48,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             }, completion: nil)
         }
     }
+    
     // MARK: Bluetooth Subview
     @IBOutlet weak var BTView: UIView!
     @IBOutlet weak var BTSubview: UIView!
@@ -101,18 +102,11 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
                 case .paired:
                     progressBar.setProgress(1.0, animated: true)
                     loadingMessage.text = "Paired"
-                    // stop timer and fade out old image for replacement
                     iconTimer?.invalidate()
-                    if BTSymbol.alpha == 1.0 {
-                        UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
-                            self.BTSymbol.alpha = 0.0
-                        }, completion: {(finished:Bool) in
-                            self.formatBTImage(color: .systemBlue)
-                            UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
-                              self.BTSymbol.alpha = 1.0
-                            }, completion: nil)
-                        })
-                    }
+                    self.formatBTImage(color: .systemBlue)
+                    UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
+                      self.BTSymbol.alpha = 1.0
+                    }, completion: nil)
                 case .transitioned:
                     progressBar.removeFromSuperview()
                     if let device = deviceName {
@@ -273,7 +267,6 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     func writeMessage(message: String) {
         dataBox.text = message + dataBox.text
     }
-    
     
     // MARK: - Core BT member vars
     var centralManager: CBCentralManager?
