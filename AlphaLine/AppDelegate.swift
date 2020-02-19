@@ -11,12 +11,12 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    var BTManager: BluetoothManager?
+    var bluetooth: BluetoothManager?
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        BTManager = BluetoothManager()
+        bluetooth = BluetoothManager()
         return true
     }
 

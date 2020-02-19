@@ -13,7 +13,7 @@ import CoreBluetooth
 class ViewController: UIViewController {
     let imageConfiguration = UIImage.SymbolConfiguration(scale: .small)
     
-    var bluetooth: BluetoothManager?
+    var appDelegate: AppDelegate?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -268,8 +268,6 @@ class ViewController: UIViewController {
     func writeMessage(message: String) {
         dataBox.text = message + dataBox.text
     }
-    
-    var appDelegate: AppDelegate?
     
     // MARK: - Main
     override func viewDidLoad() {

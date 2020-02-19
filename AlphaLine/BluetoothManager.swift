@@ -30,18 +30,14 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     var angles = Dictionary<String, Double>()
     var buffer: Data?
     
-    var view: ViewController
-    
-    init(view: ViewController) {
-        self.view = view
+    override init() {
         super.init()
         // concurrent queue for background tasks
         let centralQueue = DispatchQueue(label: "com.example.centralQueueName", attributes: .concurrent)
         self.centralManager = CBCentralManager(delegate: self, queue: centralQueue)
     }
     
-    init(view: ViewController, centralManager: CBCentralManager) {
-        self.view = view
+    init(centralManager: CBCentralManager) {
         self.centralManager = centralManager
         super.init()
     }
@@ -201,13 +197,13 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
             
             for i in 0..<angleArr.endIndex {
                 if let angle = Double(angleArr[i]) {
-                    print("\(Locations[i]): \(angle) degrees")
-                    angles[Locations[i]] = angle
+                    print("\(angleArr[i]): \(angle) degrees")
+                    angles[angleArr[i]] = angle
                     printArr.append(angle)
                 }
             }
             DispatchQueue.main.async { () -> Void in
-                self.view.writeData(printArr)
+                // TODO: - update subscribers
             }
         }
     }
