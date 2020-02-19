@@ -13,11 +13,12 @@ import CoreBluetooth
 class ViewController: UIViewController {
     let imageConfiguration = UIImage.SymbolConfiguration(scale: .small)
     
-    var bluetooth: BluetoothManager?
+    var appDelegate: AppDelegate?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.bluetooth = BluetoothManager(view: self)
+//        self.bluetooth = BluetoothManager(view: self)
+        self.appDelegate = (UIApplication.shared.delegate as! AppDelegate)
     }
 
     func stopTimer(timer: Timer) {
@@ -267,10 +268,6 @@ class ViewController: UIViewController {
     func writeMessage(message: String) {
         dataBox.text = message + dataBox.text
     }
-    
-    // MARK: - Core BT member vars
-    var centralManager: CBCentralManager?
-    var peripheralDevice: CBPeripheral?
     
     // MARK: - Main
     override func viewDidLoad() {
