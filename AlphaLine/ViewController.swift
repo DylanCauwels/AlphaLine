@@ -272,10 +272,13 @@ class ViewController: UIViewController {
     var centralManager: CBCentralManager?
     var peripheralDevice: CBPeripheral?
     
+    var appDelegate: AppDelegate
+    
     // MARK: - Main
     override func viewDidLoad() {
         // gives access to main view property before its on screen
         super.viewDidLoad()
+        appDelegate = UIApplication.shared.delegate as! AppDelegate
         // UI Commands
         formatBT()
         formatBattery()
