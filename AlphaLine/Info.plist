@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>needs bluetooth for connection</string>
+	<string>$(PRODUCT_NAME) needs BT to connect to Alphaline wearable</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
