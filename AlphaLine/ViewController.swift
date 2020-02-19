@@ -17,7 +17,8 @@ class ViewController: UIViewController {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.bluetooth = BluetoothManager(view: self)
+//        self.bluetooth = BluetoothManager(view: self)
+        self.appDelegate = (UIApplication.shared.delegate as! AppDelegate)
     }
 
     func stopTimer(timer: Timer) {
@@ -268,17 +269,12 @@ class ViewController: UIViewController {
         dataBox.text = message + dataBox.text
     }
     
-    // MARK: - Core BT member vars
-    var centralManager: CBCentralManager?
-    var peripheralDevice: CBPeripheral?
-    
-    var appDelegate: AppDelegate
+    var appDelegate: AppDelegate?
     
     // MARK: - Main
     override func viewDidLoad() {
         // gives access to main view property before its on screen
         super.viewDidLoad()
-        appDelegate = UIApplication.shared.delegate as! AppDelegate
         // UI Commands
         formatBT()
         formatBattery()
