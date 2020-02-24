@@ -11,6 +11,8 @@
 		C345D95023ECA06900504223 /* BluetoothManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C345D94F23ECA06900504223 /* BluetoothManagerTests.swift */; };
 		C36EC4CC23F1C1C000FA1276 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E3123EB637400D4AAE6 /* ViewController.swift */; };
 		C36EC4CD23F1C26800FA1276 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C345D94D23EC97B200504223 /* BluetoothManager.swift */; };
+		C36EC51123FE3B0600FA1276 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36EC51023FE3B0600FA1276 /* Observable.swift */; };
+		C36EC51323FE3C0A00FA1276 /* ObservableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36EC51223FE3C0A00FA1276 /* ObservableObject.swift */; };
 		EBC31E2E23EB637400D4AAE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E2D23EB637400D4AAE6 /* AppDelegate.swift */; };
 		EBC31E3023EB637400D4AAE6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E2F23EB637400D4AAE6 /* SceneDelegate.swift */; };
 		EBC31E3223EB637400D4AAE6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E3123EB637400D4AAE6 /* ViewController.swift */; };
@@ -44,6 +46,8 @@
 /* Begin PBXFileReference section */
 		C345D94D23EC97B200504223 /* BluetoothManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
 		C345D94F23ECA06900504223 /* BluetoothManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManagerTests.swift; sourceTree = "<group>"; };
+		C36EC51023FE3B0600FA1276 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = SOURCE_ROOT; };
+		C36EC51223FE3C0A00FA1276 /* ObservableObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableObject.swift; sourceTree = SOURCE_ROOT; };
 		EBC31E2A23EB637400D4AAE6 /* AlphaLine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlphaLine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBC31E2D23EB637400D4AAE6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EBC31E2F23EB637400D4AAE6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +92,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C36EC50F23FE3AC900FA1276 /* ObserverDesignPattern */ = {
+			isa = PBXGroup;
+			children = (
+				C36EC51023FE3B0600FA1276 /* Observable.swift */,
+				C36EC51223FE3C0A00FA1276 /* ObservableObject.swift */,
+			);
+			path = ObserverDesignPattern;
+			sourceTree = "<group>";
+		};
 		EBC31E2123EB637400D4AAE6 = {
 			isa = PBXGroup;
 			children = (
@@ -111,6 +124,7 @@
 		EBC31E2C23EB637400D4AAE6 /* AlphaLine */ = {
 			isa = PBXGroup;
 			children = (
+				C36EC50F23FE3AC900FA1276 /* ObserverDesignPattern */,
 				EBC31E6323F896A300D4AAE6 /* CustomViewController.swift */,
 				EBC31E5D23F62ED500D4AAE6 /* BackView.swift */,
 				EBC31E6523FB1D5000D4AAE6 /* DataHub.swift */,
@@ -276,6 +290,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C36EC51123FE3B0600FA1276 /* Observable.swift in Sources */,
 				EBC31E3223EB637400D4AAE6 /* ViewController.swift in Sources */,
 				EBC31E6423F896A300D4AAE6 /* CustomViewController.swift in Sources */,
 				EBC31E5E23F62ED500D4AAE6 /* BackView.swift in Sources */,
@@ -283,6 +298,7 @@
 				EBC31E2E23EB637400D4AAE6 /* AppDelegate.swift in Sources */,
 				EBC31E3023EB637400D4AAE6 /* SceneDelegate.swift in Sources */,
 				C345D94E23EC97B200504223 /* BluetoothManager.swift in Sources */,
+				C36EC51323FE3C0A00FA1276 /* ObservableObject.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
