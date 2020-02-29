@@ -69,55 +69,48 @@ class ViewController: UIViewController {
         BTSymbol.alpha = 1.0
     }
     
-    var BTState: PairingState?
-    enum PairingState {
-        case searching, found, connecting, paired, transitioned, healthy, reconnecting, error;
-    }
     var deviceName: String?
     
     // TODO: refactor method to produce symbol with diff colors
-    func changeBTState() {
-        if let state: PairingState = BTState {
-            switch state {
-                case .searching:
-                    // TODO: be able to re-add progress bar
-                    iconTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: self.BTSymbol, repeats: true)
-                    progressBar.setProgress(0.1, animated: true)
-                    loadingMessage.text = "Searching..."
-                case .found:
-                    progressBar.setProgress(0.3, animated: true)
-                    loadingMessage.text = "Device Found"
-                case .connecting:
-                    progressBar.setProgress(0.6, animated: true)
-                    loadingMessage.text = "Connecting..."
-                case .paired:
-                    progressBar.setProgress(1.0, animated: true)
-                    loadingMessage.text = "Paired"
-                    iconTimer?.invalidate()
-                    self.formatBTImage(color: .systemBlue)
-                    UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
-                      self.BTSymbol.alpha = 1.0
-                    }, completion: nil)
-                case .transitioned:
-                    progressBar.removeFromSuperview()
-                    if let device = deviceName {
-                        loadingMessage.text = device
-                    } else {
-                        loadingMessage.text = "AlphaLine Prototype v1.12"
-                    }
-                    //TODO: have the Subview resize instead of just centering the content within the adjusted content subview
-                    BTSubview.center = CGPoint(x: BTView.frame.size.width  / 2, y: BTView.frame.size.height / 2)
-                    BTState = .healthy
+    func changeBTState(_ newStatus: BluetoothPairingState, _ oldStatus: BluetoothPairingState) {
+        switch newStatus {
+            case .searching:
+                // TODO: be able to re-add progress bar
+                iconTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: self.BTSymbol, repeats: true)
+                progressBar.setProgress(0.1, animated: true)
+                loadingMessage.text = "Searching..."
+            case .found:
+                progressBar.setProgress(0.3, animated: true)
+                loadingMessage.text = "Device Found"
+            case .connecting:
+                progressBar.setProgress(0.6, animated: true)
+                loadingMessage.text = "Connecting..."
+            case .paired:
+                progressBar.setProgress(1.0, animated: true)
+                loadingMessage.text = "Paired"
+                iconTimer?.invalidate()
+                self.formatBTImage(color: .systemBlue)
+                UIView.animate(withDuration: 0.5, delay: 0.0, options: UIView.AnimationOptions.curveEaseOut, animations: {
+                  self.BTSymbol.alpha = 1.0
+                }, completion: nil)
+            case .transitioned:
+                progressBar.removeFromSuperview()
+                if let device = deviceName {
+                    loadingMessage.text = device
+                } else {
+                    loadingMessage.text = "AlphaLine Prototype v1.12"
+                }
+                //TODO: have the Subview resize instead of just centering the content within the adjusted content subview
+                BTSubview.center = CGPoint(x: BTView.frame.size.width  / 2, y: BTView.frame.size.height / 2)
             case .healthy:
-                stopTimer(timer: iconTimer!)
+                if let timer = iconTimer {stopTimer(timer: timer)}
                 formatBTImage(color: .systemBlue)
             case .reconnecting:
                 formatBTImage(color: .systemYellow)
                 iconTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: self.BTSymbol, repeats: true)
             case .error:
-                stopTimer(timer: iconTimer!)
+                if let timer = iconTimer {stopTimer(timer: timer)}
                 formatBTImage(color: .systemGray)
-            }
         }
     }
     
@@ -140,32 +133,24 @@ class ViewController: UIViewController {
         batteryImage.alpha = 1.0
     }
     
-    enum BatteryState {
-        case searching, high, low, dead;
-    }
-    var batteryState: BatteryState?
-    func changeBatteryState () {
-        if let state = batteryState {
-            switch state {
-            case .searching:
-                formatBatteryImage(color: .systemGray, symbol: "battery.100")
-                batteryTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: self.batteryImage, repeats: true)
-                batteryLabel.text = nil
-            case .high:
-                stopTimer(timer: batteryTimer!)
-                formatBatteryImage(color: .green, symbol: "battery.100")
-                setLabel("100  |  95  |  98  |  96  |  92  |  95  |  97")
-            case .low:
-                formatBatteryImage(color: .orange, symbol: "battery.25")
-                batteryTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: self.batteryImage, repeats: true)
-                setLabel("23  |  25  |  30  |  21  |  27  |  26  |  30")
-            case .dead:
-                stopTimer(timer: batteryTimer!)
-                formatBatteryImage(color: .red, symbol: "battery.0")
-                batteryLabel.text = nil
-            }
-        } else {
-            print("battery state uninitialized")
+    func changeBatteryState (_ newState: DeviceBatteryState, _ oldState: DeviceBatteryState) {
+        switch newState {
+        case .searching:
+            formatBatteryImage(color: .systemGray, symbol: "battery.100")
+            batteryTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: self.batteryImage, repeats: true)
+            batteryLabel.text = nil
+        case .high:
+            stopTimer(timer: batteryTimer!)
+            formatBatteryImage(color: .green, symbol: "battery.100")
+            setLabel("100  |  95  |  98  |  96  |  92  |  95  |  97")
+        case .low:
+            formatBatteryImage(color: .orange, symbol: "battery.25")
+            batteryTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: self.batteryImage, repeats: true)
+            setLabel("23  |  25  |  30  |  21  |  27  |  26  |  30")
+        case .dead:
+            stopTimer(timer: batteryTimer!)
+            formatBatteryImage(color: .red, symbol: "battery.0")
+            batteryLabel.text = nil
         }
     }
     
@@ -192,6 +177,8 @@ class ViewController: UIViewController {
     // MARK: Testing Subview
     @IBOutlet weak var testView: UIView!
     
+    private var BTState: BluetoothPairingState?
+    
     @IBAction func testBT(_ sender: Any) {
         if let state = BTState {
             switch state {
@@ -215,11 +202,14 @@ class ViewController: UIViewController {
         } else {
             BTState = .searching
         }
-        changeBTState()
+        changeBTState(BTState!, .searching)
     }
     
+    private var batteryState: DeviceBatteryState?
     @IBAction func testBattery(_ sender: Any) {
+        var oldValue: DeviceBatteryState
         if let state = batteryState {
+            oldValue = batteryState!
             switch state {
             case .searching:
                 batteryState = .high
@@ -231,9 +221,10 @@ class ViewController: UIViewController {
                 batteryState = .searching
             }
         } else {
+            oldValue = .searching
             batteryState = .searching
         }
-        changeBatteryState()
+        changeBatteryState(batteryState!, oldValue)
     }
     
     @IBAction func testBackView(_ sender: Any) {
@@ -244,7 +235,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func testData(_ sender: Any) {
-        writeData(data: arc4random())
+        writeData(String(arc4random()))
     }
     
     func formatTesting() {
@@ -264,8 +255,17 @@ class ViewController: UIViewController {
         
         self.dataBox.layer.cornerRadius = 5
     }
+    
+    func logAngles(_ newAngles: [Double], _ oldAngles: [Double]) {
+        var arr: Array<String> = []
+        newAngles.forEach { angle in
+            arr.append(String(format: "%.1f", angle))
+        }
+        writeData(arr.joined(separator: ","))
+    }
+    
     // writes data to the textbox with datetime
-    func writeData(data:UInt32) {
+    func writeData(_ data: String) {
         let date = Date()
         let calendar = Calendar.current
         let hour = calendar.component(.hour, from: date)
@@ -296,6 +296,12 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         // gives access to main view property before its on screen
         super.viewDidLoad()
+        // subscribe to bt status updates, device battery level updates
+        let initialStatus = self.appDelegate?.bluetooth?.subscribeToStatus(observer: self, block: self.changeBTState)
+        changeBTState(initialStatus!, BluetoothPairingState.error)
+        let initialBattLevel = self.appDelegate?.bluetooth?.subscribeToBatteryLevel(observer: self, block: self.changeBatteryState)
+        changeBatteryState(initialBattLevel!, .searching)
+        _ = self.appDelegate?.bluetooth?.subscribeToAngles(observer: self, block: self.logAngles)
         // UI Commands
         formatBT()
         formatBattery()
