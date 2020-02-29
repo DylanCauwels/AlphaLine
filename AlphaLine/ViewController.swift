@@ -229,7 +229,10 @@ class ViewController: UIViewController {
     
     @IBAction func testBackView(_ sender: Any) {
         var meas = measurement()
+        // Once anglesToPoints is completed replace this with the next line
         meas.populateMeasurement(height: backView.frame.height, width: backView.frame.width)
+        // meas.populateAngles([<angles>])
+        // meas.toPoints(fixed vertical spacing between nodes, fixed horizontal spacing between hip nodes, backView.frame.height, backView.frame.width)
         dataHub!.addData(data: meas)
         dataHub!.ingestData()
     }

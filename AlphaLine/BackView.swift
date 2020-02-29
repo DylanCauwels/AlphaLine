@@ -6,6 +6,34 @@
 //  Copyright © 2020 Group 6. All rights reserved.
 //
 
+// Angle Placement
+/*
+       x
+       | 1
+       x
+       | 2
+       x
+       | 3
+       x
+       | 4
+ ==x===x===x==
+     5 | 6
+ */
+
+// Sensor Placement
+/*
+      x 1
+      |
+      x 2
+      |
+      x 3
+      |
+      x 4
+      |
+==x===x===x==
+  4   |5  7
+*/
+
 import UIKit
 
 struct arc {
