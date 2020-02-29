@@ -64,16 +64,6 @@ class ViewController: UIViewController {
         progressBar.progress = 0.0
     }
     
-    
-    func formatBTView() {
-        // BT view border
-        self.BTView.layer.borderWidth = 2
-        self.BTView.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
-        self.BTView.layer.cornerRadius = 10
-        // Progress bar init
-        progressBar.setProgress(0.0, animated: false)
-    }
-    
     func formatBTImage(color: UIColor) {
         BTSymbol.image = getSymbol(color: color, symbol: "dot.radiowaves.left.and.right")
         BTSymbol.alpha = 1.0
@@ -135,19 +125,14 @@ class ViewController: UIViewController {
     // MARK: Battery Subview
     @IBOutlet weak var batteryView: UIView!
     @IBOutlet weak var batteryImage: UIImageView!
+    @IBOutlet weak var batteryLabel: UILabel!
     
     var batteryTimer: Timer?
     
     // TODO: refactor into single border change method
     func formatBattery() {
-        formatBatteryView()
+        formatView(view: batteryView)
         formatBatteryImage(color: .systemGray, symbol: "battery.100")
-    }
-    
-    func formatBatteryView() {
-        self.batteryView.layer.borderWidth = 2
-        self.batteryView.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
-        self.batteryView.layer.cornerRadius = 10
     }
     
     func formatBatteryImage(color: UIColor, symbol: String) {
@@ -165,19 +150,43 @@ class ViewController: UIViewController {
             case .searching:
                 formatBatteryImage(color: .systemGray, symbol: "battery.100")
                 batteryTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: self.batteryImage, repeats: true)
+                batteryLabel.text = nil
             case .high:
                 stopTimer(timer: batteryTimer!)
                 formatBatteryImage(color: .green, symbol: "battery.100")
+                setLabel("100  |  95  |  98  |  96  |  92  |  95  |  97")
             case .low:
                 formatBatteryImage(color: .orange, symbol: "battery.25")
                 batteryTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: self.batteryImage, repeats: true)
+                setLabel("23  |  25  |  30  |  21  |  27  |  26  |  30")
             case .dead:
                 stopTimer(timer: batteryTimer!)
                 formatBatteryImage(color: .red, symbol: "battery.0")
+                batteryLabel.text = nil
             }
         } else {
             print("battery state uninitialized")
         }
+    }
+    
+    func setLabel(_ string: String) {
+        batteryLabel.attributedText = attributedString(from: string, nonBoldRange: NSMakeRange(5, string.count-5))
+    }
+    
+    func attributedString(from string: String, nonBoldRange: NSRange?) -> NSAttributedString {
+        let fontSize = UIFont.systemFontSize
+        let attrs = [
+            NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: fontSize),
+            NSAttributedString.Key.foregroundColor: UIColor.black
+        ]
+        let nonBoldAttribute = [
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: fontSize),
+        ]
+        let attrStr = NSMutableAttributedString(string: string, attributes: attrs)
+        if let range = nonBoldRange {
+            attrStr.setAttributes(nonBoldAttribute, range: range)
+        }
+        return attrStr
     }
     
     // MARK: Testing Subview
@@ -227,14 +236,19 @@ class ViewController: UIViewController {
         changeBatteryState()
     }
     
+    @IBAction func testBackView(_ sender: Any) {
+        var meas = measurement()
+        meas.populateMeasurement(height: backView.frame.height, width: backView.frame.width)
+        dataHub!.addData(data: meas)
+        dataHub!.ingestData()
+    }
+    
     @IBAction func testData(_ sender: Any) {
         writeData(data: arc4random())
     }
     
     func formatTesting() {
-        self.testView.layer.borderWidth = 2
-        self.testView.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
-        self.testView.layer.cornerRadius = 10
+        formatView(view: testView)
     }
     
     // MARK: Network Display Subview
@@ -269,6 +283,15 @@ class ViewController: UIViewController {
         dataBox.text = message + dataBox.text
     }
     
+    // MARK: - Back View
+    @IBOutlet weak var backView: BackView!
+    var dataHub: DataHub?
+    
+    func formatBackView() {
+        self.dataHub = DataHub(backView: backView!)
+        formatView(view: backView)
+    }
+    
     // MARK: - Main
     override func viewDidLoad() {
         // gives access to main view property before its on screen
@@ -278,5 +301,7 @@ class ViewController: UIViewController {
         formatBattery()
         formatTesting()
         formatNetwork()
+        formatBackView()
+        
     }
 }

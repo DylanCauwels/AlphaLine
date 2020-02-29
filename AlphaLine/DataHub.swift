@@ -65,6 +65,9 @@ class DataHub {
         view = backView
     }
     
+    func addData(data: measurement) {
+        q.enqueue(key: data)
+    }
     
     func ingestData() {
         if let data = q.dequeue() {
@@ -130,12 +133,13 @@ public class Queue<T> {
     }
     func dequeue() -> T? {
         if self.head?.data == nil { return nil  }
+        let temp = head
         if let nextItem = self.head?.next {
             head = nextItem
         } else {
             head = nil
         }
-        return head?.data
+        return temp?.data
     }
 }
 

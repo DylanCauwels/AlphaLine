@@ -38,6 +38,7 @@ class BackView: UIView {
             context.setLineWidth(width)
             color.set()
             context.addArc(center: center, radius: radius, startAngle: 0.0, endAngle: .pi * 2.0, clockwise: true)
+            context.strokePath()
         }
     }
     
@@ -54,22 +55,28 @@ class BackView: UIView {
         if let context = UIGraphicsGetCurrentContext() {
             context.setLineWidth(1.5)
             UIColor(red:225/255, green:225/255, blue:225/255, alpha: 1).set()
-            drawLine(start: CGPoint(x: self.width! * 0.2, y: self.height! * 0.8), end: CGPoint(x: self.width! * 0.8, y: self.height! * 0.8))
-            drawLine(start: CGPoint(x: self.width! * 0.5, y: self.height! * 0.1), end: CGPoint(x: self.width! * 0.5, y: self.height! * 0.9))
+            print(NSLayoutConstraint.Attribute.centerX.rawValue)
+            print(self.width! * 0.5)
+            drawLine(start: CGPoint(x: self.width! * 0.25, y: self.height! * 0.85), end: CGPoint(x: self.width! * 0.85, y: self.height! * 0.85))
+            drawLine(start: CGPoint(x: self.width! * 0.55, y: self.height! * 0.1), end: CGPoint(x: self.width! * 0.55, y: self.height! * 0.95))
             context.strokePath()
         }
     }
     
     func drawData(data: [CGPoint], colors: [UIColor]) {
-        self.data = data
+        if self.data == [] {
+            self.data = data
+        } else {
+            self.data = []
+        }
         self.colors = colors
         setNeedsDisplay()
     }
     
     override func draw(_ rect: CGRect) {
-        print("drawing")
+//        print("redrawing view")
         drawOutlines()
-        for (index, point) in data!.enumerated() {
+        for (index, point) in data!.enumerated(){
             drawCircle(center: point, radius: 5, color: colors![index], width: 1.5)
         }
     }
