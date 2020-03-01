@@ -15,16 +15,15 @@ struct measurement {
     
     // quaternian data converted to angles
     var angles: [Double]
-//        var angels: [(Double, Double)] = []
     
     // final positional data post-conversion
-    var points: [CGPoint]
+    var points: [CGPoint]?
     let timestamp: Date
     var constraintsViolated: Bool
-    init() {
+    
+    init(_ angles: Array<Double>) {
+        self.angles = angles
         self.quaternians = [] // magic
-        self.angles = [] // len 6
-        self.points = [] // len 7
         self.timestamp = Date()
         self.constraintsViolated = false
     }
@@ -40,19 +39,50 @@ struct measurement {
                          CGPoint(x: width * 0.35, y: height * 0.86)]  // 7
     }
     
-    mutating func populateAngles(angles: [Double]) {
-        self.angles = angles
-    }
-    
     // convert angle values to point values
-    mutating func toPoints(vertSpacing: Double, horizSpacing: Double, height: CGFloat, width: CGFloat) {
-        // build from 5 outward to 6, 7
+    mutating func toPoints(vertSpacing: CGFloat, horizSpacing: CGFloat, height: CGFloat, width: CGFloat) {
+        // arrays of x and y coordinates for seven points, see BackView.swift for layout
+        var x: Array<CGFloat> = [0, 0, 0, 0, 0, 0, 0]
+        var y: Array<CGFloat> = [0, 0, 0, 0, 0, 0, 0]
         
-        // build from 5 upward to 4 -> 3 -> 2 -> 1
+        // set point five to center bottom
+        x[4] = width * 0.5
+        y[4] = height * 0.85
+        
+        // start with point 5 and work up to point 1
+        for i in (0..<4).reversed() {
+            let angle = angles[i]
+            x[i] = x[i+1] - vertSpacing*CGFloat(sind(angle))
+            y[i] = y[i+1] - vertSpacing*CGFloat(cosd(angle))
+        }
+        
+        // left hip
+        x[5] = x[4] - horizSpacing*CGFloat(cosd(angles[4]))
+        y[5] = y[4] - horizSpacing*CGFloat(sind(angles[4]))
+        
+        // right hip
+        x[6] = x[4] + horizSpacing*CGFloat(cosd(angles[5]))
+        y[6] = y[4] - horizSpacing*CGFloat(sind(angles[5]))
+        
+        self.points = []
+        // convert coordinates to point objects
+        for i in 0..<7 {
+            points!.append(CGPoint(x:x[i], y:y[i]))
+        }
+        
+        print("Huzzah! The angles are no longer angles, but points! Praise the heavenly father!")
     }
     
     // convert quaternian values to angle values
     mutating func toAngles() {}
+    
+    private func sind(_ angle: Double) -> Double {
+        return sin(2*Double.pi*angle/360)
+    }
+    
+    private func cosd(_ angle: Double) -> Double {
+        return cos(2*Double.pi*angle/360)
+    }
     
 }
 
@@ -85,13 +115,13 @@ class DataHub {
                 // constraints are currently being set by the data
                 case .training:
                     setConstraints(data: data)
-                    view.drawData(data: data.points, colors: trainingColors)
+                    view.drawData(data: data.points!, colors: trainingColors)
                 // constraints have been defined and need to be checked against
                 case .constrained:
-                    view.drawData(data: data.points, colors: checkConstraints(data: data) ?? defaultColors)
+                    view.drawData(data: data.points!, colors: checkConstraints(data: data) ?? defaultColors)
                 // diagnostics mode, no pre/post-processing required
                 case .free:
-                    view.drawData(data: data.points, colors: defaultColors)
+                    view.drawData(data: data.points!, colors: defaultColors)
             }
         } else {
             // TODO: change to thrown exception

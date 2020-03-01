@@ -23,8 +23,8 @@ class CustomViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        formatView(view: backDisplay)
-        _ = DataHub(backView: backView)
+//        formatView(view: backDisplay)
+//        _ = DataHub(backView: backView)
     }
     
 
