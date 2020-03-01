@@ -10,36 +10,167 @@ import Foundation
 import CoreBluetooth
 
 // MARK: - Core Bluetooth Service IDs
-let BLE_UART_Service_CBUUID = CBUUID(string: "6e400001-b5a3-f393-e0a9-e50e24dcca9e")
+private let BLE_UART_Service_CBUUID = CBUUID(string: "6e400001-b5a3-f393-e0a9-e50e24dcca9e")
  
 // MARK: - Core Bluetooth Characteristic IDs
-let BLE_Tx_Characteristic_CBUUID = CBUUID(string: "6e400002-b5a3-f393-e0a9-e50e24dcca9e")
-let BLE_Rx_Characteristic_CBUUID = CBUUID(string: "6e400003-b5a3-f393-e0a9-e50e24dcca9e")
+private let BLE_Tx_Characteristic_CBUUID = CBUUID(string: "6e400002-b5a3-f393-e0a9-e50e24dcca9e")
+private let BLE_Rx_Characteristic_CBUUID = CBUUID(string: "6e400003-b5a3-f393-e0a9-e50e24dcca9e")
 
 // MARK: - UART Protocol Special Chars
-let Rx_Start = Character("{")
-let Rx_End = Character("}")
+private let Rx_Start = Character("{")
+private let Rx_End = Character("}")
+
+// Expected Number of Values Transmitted by Device per Message
+private let EXPECTED_ANGLE_COUNT = 6
+
+// Pairing State
+enum BluetoothPairingState {
+    case searching, found, connecting, paired, transitioned, healthy, reconnecting, error;
+}
+// Device Battery State
+enum DeviceBatteryState {
+    case searching, high, low, dead;
+}
+
+// Observer Type Aliases
+typealias StatusObserverBlock = (_ newStatus: BluetoothPairingState, _ oldStatus: BluetoothPairingState) -> ()
+typealias StatusObserversEntry = (observer: AnyObject, block: StatusObserverBlock)
+typealias AngleObserverBlock = (_ newValue: [Double], _ oldValue: [Double]) -> ()
+typealias AngleObserversEntry = (observer: AnyObject, block: AngleObserverBlock)
+typealias BatteryObserverBlock = (_ newState: DeviceBatteryState, _ oldState: DeviceBatteryState) -> ()
+typealias BatteryObserversEntry = (observer: AnyObject, block: BatteryObserverBlock)
 
 class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     // Core BT member vars
-    var centralManager: CBCentralManager?
-    var peripheralDevice: CBPeripheral?
+    private var centralManager: CBCentralManager?
+    private var peripheralDevice: CBPeripheral?
     
-    // Sensor Data vars
-    var angles = Dictionary<String, Double>()
-    var buffer: Data?
+    // Device Data
+    private var buffer: Data?
+    private var status: BluetoothPairingState {
+        // notify observers when bluetooth status changes
+        didSet {
+            statusObservers.forEach({ (entry: StatusObserversEntry) in
+                let (_, block) = entry
+                DispatchQueue.main.async { () -> Void in
+                    block(self.status, oldValue)
+                }
+            })
+        }
+    }
+    private var angles: [Double] {
+        // notify observers when receiving updated angles
+        didSet {
+            angleObservers.forEach({ (entry: AngleObserversEntry) in
+                let (_, block) = entry
+                DispatchQueue.main.async { () -> Void in
+                    block(self.angles, oldValue)
+                }
+            })
+        }
+    }
+    private var batteryLevel: DeviceBatteryState {
+        // notify observers when device battery level changes
+        didSet {
+            // only notify if value is changed
+            if batteryLevel != oldValue {
+                batteryObservers.forEach({ (entry: BatteryObserversEntry) in
+                    let (_, block) = entry
+                    DispatchQueue.main.async { () -> Void in
+                        block(self.batteryLevel, oldValue)
+                    }
+                })
+            }
+        }
+    }
+    
+    // Observer Arrays
+    // Note: Entries are not easily hashable, so we choose not to use a Set
+    private var statusObservers: Array<StatusObserversEntry>
+    private var angleObservers: Array<AngleObserversEntry>
+    private var batteryObservers: Array<BatteryObserversEntry>
     
     override init() {
+        self.statusObservers = []
+        self.angleObservers = []
+        self.batteryObservers = []
+        self.angles = []
+        self.status = .error
+        self.batteryLevel = .searching
         super.init()
         // concurrent queue for background tasks
         let centralQueue = DispatchQueue(label: "com.example.centralQueueName", attributes: .concurrent)
         self.centralManager = CBCentralManager(delegate: self, queue: centralQueue)
     }
     
-    init(centralManager: CBCentralManager) {
+    internal init(centralManager: CBCentralManager) {
         self.centralManager = centralManager
+        self.statusObservers = []
+        self.angleObservers = []
+        self.batteryObservers = []
+        self.angles = []
+        self.batteryLevel = .searching
+        self.status = .error
         super.init()
+    }
+    
+    // MARK: - Observer Subscription Methods
+    
+    /// Subscribe to notifications when Bluetooth pairing state is changed. Returns current state.
+    /// - Parameters:
+    ///   - observer: object to subscribe
+    ///   - block: closure to call with updated status
+    func subscribeToStatus(observer: AnyObject, block: @escaping StatusObserverBlock) -> BluetoothPairingState {
+        let entry: StatusObserversEntry = (observer: observer, block: block)
+        statusObservers.append(entry)
+        return status
+    }
+    
+    func unsubscribeFromStatus(observer: AnyObject) {
+        let filtered = statusObservers.filter { entry in
+            let (owner, _) = entry
+            return owner !== observer
+        }
+
+        statusObservers = filtered
+    }
+    
+    /// Subscribe to notifications when device measurement (in angles) is changed. Returns current values.
+    /// - Parameters:
+    ///   - observer: subscribing object
+    ///   - block: closure to call with updated measurements
+    func subscribeToAngles(observer: AnyObject, block: @escaping AngleObserverBlock) -> [Double] {
+        let entry: AngleObserversEntry = (observer: observer, block: block)
+        angleObservers.append(entry)
+        return angles
+    }
+    
+    func unsubscribeFromAngles(observer: AnyObject) {
+        let filtered = angleObservers.filter { entry in
+            let (owner, _) = entry
+            return owner !== observer
+        }
+
+        angleObservers = filtered
+    }
+    
+    /// Subscribe to notifications when device battery level changes. Returns current value.
+    /// - Parameters:
+    ///   - observer: subscribing object
+    ///   - block: closure to call with updated value
+    func subscribeToBatteryLevel(observer: AnyObject, block: @escaping BatteryObserverBlock) -> DeviceBatteryState {
+        let entry = (observer: observer, block: block)
+        batteryObservers.append(entry)
+        return batteryLevel
+    }
+    
+    func unsubscribeFromBatteryLevel(observer: AnyObject) {
+        let filtered = batteryObservers.filter { entry in
+            let (owner, _) = entry
+            return owner !== observer
+        }
+        batteryObservers = filtered
     }
     
     // MARK: - CBCentralManagerDelegate methods
@@ -49,19 +180,19 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     
         case .unknown:
             print("Bluetooth status is UNKNOWN")
-            
+            status = .error
         case .resetting:
             print("Bluetooth status is RESETTING")
-            
+            status = .error
         case .unsupported:
             print("Bluetooth status is UNSUPPORTED")
-            
+            status = .error
         case .unauthorized:
             print("Bluetooth status is UNAUTHORIZED")
-            
+            status = .error
         case .poweredOff:
             print("Bluetooth status is POWERED OFF")
-            
+            status = .error
         case .poweredOn:
             print("Bluetooth status is POWERED ON")
             
@@ -70,8 +201,8 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
             }
             
             // scan for peripherals with our service
-            centralManager?.scanForPeripherals(withServices: [BLE_UART_Service_CBUUID])
-            
+            central.scanForPeripherals(withServices: [BLE_UART_Service_CBUUID])
+            status = .searching
         }
     }
     
@@ -89,6 +220,8 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         // TODO: update this for multiple devices
         centralManager?.stopScan()
         
+        status = .found
+        
         // connect to peripheral
         centralManager?.connect(peripheralDevice!)
     }
@@ -96,12 +229,13 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     // "Invoked when a connection is successfully created with a peripheral."
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
        
-       DispatchQueue.main.async { () -> Void in
+        DispatchQueue.main.async { () -> Void in
            // TODO: update UI
-       }
+        }
        
-       // look for our service(s) on peripheral
-       peripheralDevice?.discoverServices([BLE_UART_Service_CBUUID])
+        status = .paired
+        // look for our service(s) on peripheral
+        peripheralDevice?.discoverServices([BLE_UART_Service_CBUUID])
     }
     
     // peripheral has disconnected
@@ -113,6 +247,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
             // TODO: - update UI
         }
         
+        status = .searching
         // start scanning for a new device
         centralManager?.scanForPeripherals(withServices: [BLE_UART_Service_CBUUID])
     }
@@ -123,7 +258,6 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         decodePeripheralState(peripheralState: peripheral.state)
         for service in peripheral.services! {
             if service.uuid == BLE_UART_Service_CBUUID {
-                print("Service: \(service)")
                 // look for the characterics we want
                 peripheral.discoverCharacteristics(nil, for: service)
             }
@@ -132,13 +266,13 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     
     // confirm we have the characteristics and services we want
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-       for characteristic in service.characteristics! {
-           print(characteristic)
-           if characteristic.uuid == BLE_Rx_Characteristic_CBUUID {
-               // subscribe to regular notifications on Rx line
-               peripheral.setNotifyValue(true, for: characteristic)
-           }
-       }
+        for characteristic in service.characteristics! {
+            if characteristic.uuid == BLE_Rx_Characteristic_CBUUID {
+                // subscribe to regular notifications on Rx line
+                status = .transitioned
+                peripheral.setNotifyValue(true, for: characteristic)
+            }
+        }
     }
     
     // read updated values
@@ -147,16 +281,12 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
                 if cacheData(data: characteristic.value) {
                     decodeRx()
                 }
-            
-               DispatchQueue.main.async { () -> Void in
-                   // TODO: -update UI
-               }
            }
        }
     
     // MARK: - UTIL funcs
     
-    func decodePeripheralState(peripheralState: CBPeripheralState) {
+    private func decodePeripheralState(peripheralState: CBPeripheralState) {
         switch peripheralState {
         case .disconnected:
             print("Peripheral state: disconnected")
@@ -169,7 +299,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         }
     }
     
-    func cacheData(data: Data?) -> Bool {
+    private func cacheData(data: Data?) -> Bool {
         if let data = data {
             if data[data.startIndex] == Rx_Start.asciiValue {
                 buffer = data
@@ -184,26 +314,36 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         return false
     }
     
-    func decodeRx() {
+    private func decodeRx() {
         if let buffer = buffer {
             var data: String! = String(data: buffer, encoding: .utf8)
+            print("Data received: \(data)")
             // trim leading and trailing brackets
             data.removeFirst()
             data.removeLast()
             
-            let angleArr = data.components(separatedBy: ",")
+            let values = data.components(separatedBy: ",")
             
-            var printArr: Array<Double> = Array<Double>()
+            if values.count != EXPECTED_ANGLE_COUNT {
+                print("WARNING: Expected \(EXPECTED_ANGLE_COUNT) values but got \(values.count)")
+            }
             
-            for i in 0..<angleArr.endIndex {
-                if let angle = Double(angleArr[i]) {
-                    print("\(angleArr[i]): \(angle) degrees")
-                    angles[angleArr[i]] = angle
-                    printArr.append(angle)
+            var angles: [Double] = []
+                
+            values.forEach() { val in
+                if let angle = Double(val) {
+                    angles.append(angle)
+                }
+                else {
+                    print("Could not convert \(val) to Double")
                 }
             }
-            DispatchQueue.main.async { () -> Void in
-                // TODO: - update subscribers
+            
+            if angles.count == values.count {
+                self.angles = angles
+            }
+            else {
+                print("Not all values could be converted to Float, ignoring message")
             }
         }
     }
