@@ -228,10 +228,10 @@ class ViewController: UIViewController {
     }
     
     @IBAction func testBackView(_ sender: Any) {
-        var meas = measurement([25.0, 20.0, 15.0, 10.0, 0.0, 0.0])
+        var meas = measurement([-25.0, -20.0, -15.0, -10.0, -5.0, 5.0])
         // Once anglesToPoints is completed replace this with the next line
 //        meas.populateMeasurement(height: backView.frame.height, width: backView.frame.width)
-        meas.toPoints(vertSpacing: backView.frame.height*0.2, horizSpacing: backView.frame.width*0.25, height: backView.frame.height, width: backView.frame.width)
+        meas.toPoints(vertSpacing: backView.frame.height*0.175, horizSpacing: backView.frame.width*0.2, height: backView.frame.height, width: backView.frame.width)
         dataHub!.addData(data: meas)
         dataHub!.ingestData()
     }
@@ -304,12 +304,16 @@ class ViewController: UIViewController {
         let initialBattLevel = self.appDelegate?.bluetooth?.subscribeToBatteryLevel(observer: self, block: self.changeBatteryState)
         changeBatteryState(initialBattLevel!, .searching)
         _ = self.appDelegate?.bluetooth?.subscribeToAngles(observer: self, block: self.logAngles)
+        
         // UI Commands
         formatBT()
         formatBattery()
         formatTesting()
         formatNetwork()
         formatBackView()
+        
+        // subscribe datahub to angles
+        _ = self.appDelegate?.bluetooth?.subscribeToAngles(observer: dataHub!, block: dataHub!.updateDrawing)
         
     }
 }

@@ -9,6 +9,9 @@
 import Foundation
 import UIKit
 
+let VERT_SPACING_RATIO = CGFloat(0.175)
+let HORIZ_SPACING_RATIO = CGFloat(0.2)
+
 struct measurement {
     // raw quaternian data
     var quaternians: [Double]
@@ -126,6 +129,23 @@ class DataHub {
         } else {
             // TODO: change to thrown exception
             print("queue empty, no data to process")
+        }
+    }
+    
+    func updateDrawing(_ newValue: [Double], _ : [Double]) {
+        var data = measurement(newValue)
+        data.toPoints(vertSpacing: VERT_SPACING_RATIO*view.frame.height, horizSpacing: HORIZ_SPACING_RATIO*view.frame.width, height: view.frame.height, width: view.frame.width)
+        switch mode {
+            // constraints are currently being set by the data
+            case .training:
+                setConstraints(data: data)
+                view.drawData(data: data.points!, colors: trainingColors)
+            // constraints have been defined and need to be checked against
+            case .constrained:
+                view.drawData(data: data.points!, colors: checkConstraints(data: data) ?? defaultColors)
+            // diagnostics mode, no pre/post-processing required
+            case .free:
+                view.drawData(data: data.points!, colors: defaultColors)
         }
     }
     

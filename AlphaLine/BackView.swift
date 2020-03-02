@@ -54,7 +54,7 @@ class BackView: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-       super.init(coder: aDecoder)
+        super.init(coder: aDecoder)
         self.width = frame.size.width
         self.height = frame.size.height
         self.data = []
@@ -92,11 +92,7 @@ class BackView: UIView {
     }
     
     func drawData(data: [CGPoint], colors: [UIColor]) {
-        if self.data == [] {
-            self.data = data
-        } else {
-            self.data = []
-        }
+        self.data = data
         self.colors = colors
         setNeedsDisplay()
     }
