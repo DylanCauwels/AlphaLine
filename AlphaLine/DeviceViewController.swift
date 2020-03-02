@@ -10,7 +10,7 @@ import UIKit
 import CoreBluetooth
 
 // MARK: - Main Storyboard
-class ViewController: UIViewController {
+class DeviceViewController: UIViewController, UIScrollViewDelegate {
     let imageConfiguration = UIImage.SymbolConfiguration(scale: .small)
     
     var appDelegate: AppDelegate?
@@ -312,5 +312,27 @@ class ViewController: UIViewController {
         formatNetwork()
         formatBackView()
         
+    }
+    
+    // MARK: - NavBar
+    override func viewDidAppear(_ animated: Bool) {
+        def = self.titleBar!.shadowImage
+        self.titleBar?.shadowImage = UIImage()
+        self.titleBar?.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+    }
+    
+    var def:UIImage?
+    
+    @IBOutlet var titleBar: UINavigationBar!
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (scrollView.contentOffset.y < 8 ) {
+            self.titleBar?.shadowImage = UIImage()
+            self.titleBar?.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+
+        } else {
+            self.titleBar?.shadowImage = def
+            self.titleBar?.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
+        }
     }
 }
