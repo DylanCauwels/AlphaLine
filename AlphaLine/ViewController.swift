@@ -68,9 +68,7 @@ class ViewController: UIViewController {
         BTSymbol.image = getSymbol(color: color, symbol: "dot.radiowaves.left.and.right")
         BTSymbol.alpha = 1.0
     }
-    
-    var deviceName: String?
-    
+        
     // TODO: refactor method to produce symbol with diff colors
     func changeBTState(_ newStatus: BluetoothPairingState, _ oldStatus: BluetoothPairingState) {
         switch newStatus {
@@ -95,7 +93,7 @@ class ViewController: UIViewController {
                 }, completion: nil)
             case .transitioned:
                 progressBar.removeFromSuperview()
-                if let device = deviceName {
+                if let device = appDelegate?.bluetooth?.deviceName {
                     loadingMessage.text = device
                 } else {
                     loadingMessage.text = "AlphaLine Prototype v1.12"
