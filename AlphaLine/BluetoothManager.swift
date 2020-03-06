@@ -48,6 +48,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     
     // Device Data
     private var buffer: Data?
+    var deviceName: String?
     private var status: BluetoothPairingState {
         // notify observers when bluetooth status changes
         didSet {
@@ -248,6 +249,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
         }
         
         status = .searching
+        batteryLevel = .searching
         // start scanning for a new device
         centralManager?.scanForPeripherals(withServices: [BLE_UART_Service_CBUUID])
     }
@@ -270,6 +272,8 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
             if characteristic.uuid == BLE_Rx_Characteristic_CBUUID {
                 // subscribe to regular notifications on Rx line
                 status = .transitioned
+                batteryLevel = .high
+                deviceName = peripheral.name
                 peripheral.setNotifyValue(true, for: characteristic)
             }
         }
