@@ -276,13 +276,22 @@ class ViewController: UIViewController {
         
         // compiling message
         let datetime: String = String(hour) + ":" + String(minutes) + ":" + String(seconds)
-        let received: String = "\nData: " + String(data) + " \n\tReceived At: " + datetime
+        let received: String = "Data: " + String(data) + " \n\tReceived At: " + datetime + "\n"
         writeMessage(message: received)
     }
     
+    var data: [String] = []
     // writes message to the dataBox
     func writeMessage(message: String) {
-        dataBox.text = message + dataBox.text
+        if data.count >= 10 {
+            data.remove(at: data.count-1)
+        }
+        data.insert(message, at: 0)
+        var finalMessage: String = ""
+        for message: String in  data {
+            finalMessage += message
+        }
+        dataBox.text = finalMessage
     }
     
     // MARK: - Back View
