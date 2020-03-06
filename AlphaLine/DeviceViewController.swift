@@ -251,7 +251,6 @@ class DeviceViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var dataView: UIView!
 
     func formatNetwork() {
-        dataLabel.font = dataLabel.font.withSize(20)
         self.dataView.layer.borderWidth = 2
         self.dataView.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
         self.dataView.layer.cornerRadius = 10

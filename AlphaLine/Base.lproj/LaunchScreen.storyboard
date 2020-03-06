@@ -15,12 +15,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="LoadingScreen_Blue" translatesAutoresizingMaskIntoConstraints="NO" id="xri-KS-1Uy">
-                                <rect key="frame" x="0.0" y="1" width="375" height="812"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LoadingScreen_Blue" translatesAutoresizingMaskIntoConstraints="NO" id="xri-KS-1Uy">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="xri-KS-1Uy" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="CX9-1F-xD5"/>
+                            <constraint firstItem="xri-KS-1Uy" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="HED-8U-gbP"/>
+                            <constraint firstItem="xri-KS-1Uy" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="HUy-wB-TwK"/>
+                            <constraint firstAttribute="bottom" secondItem="xri-KS-1Uy" secondAttribute="bottom" id="WDS-np-Frb"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
@@ -30,6 +35,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LoadingScreen_Blue" width="1125" height="2436"/>
+        <image name="LoadingScreen_Blue" width="375" height="812"/>
     </resources>
 </document>
