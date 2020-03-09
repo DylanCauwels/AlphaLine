@@ -22,7 +22,7 @@ class LaunchScreen: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let seconds = 1.0
+        let seconds = 1.5
         self.logoAnimationView.logoGifImageView.stopAnimating()
         // delay to prevent gif from stuttering due to object load
         DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
