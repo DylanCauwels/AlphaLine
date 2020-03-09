@@ -1,5 +1,5 @@
 //
-//  BTManager.swift
+//  BluetoothManager.swift
 //  AlphaLine
 //
 //  Created by Jarrad Cisco on 2/6/20.
@@ -18,10 +18,11 @@ private let BLE_Rx_Characteristic_CBUUID = CBUUID(string: "6e400003-b5a3-f393-e0
 
 // MARK: - UART Protocol Special Chars
 private let Rx_Start = Character("{")
-private let Rx_End = Character("}")
+private let Rx_End = Character("\n")
 
 // Expected Number of Values Transmitted by Device per Message
-private let EXPECTED_ANGLE_COUNT = 6
+private let EXPECTED_VALUES_COUNT = 6
+private let STATUS_FIELDS_COUNT = 1
 
 // Pairing State
 enum BluetoothPairingState {
@@ -49,6 +50,8 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     // Device Data
     private var buffer: Data?
     var deviceName: String?
+    private var packetNo: Int?
+    private var droppedPackets: Int = 0
     private var status: BluetoothPairingState {
         // notify observers when bluetooth status changes
         didSet {
@@ -85,6 +88,8 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
             }
         }
     }
+    
+    
     
     // Observer Arrays
     // Note: Entries are not easily hashable, so we choose not to use a Set
@@ -210,7 +215,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     // look at peripherals with our service
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         
-        print(peripheral.name!)
+        print("Discovered \(peripheral.name!)")
         decodePeripheralState(peripheralState: peripheral.state)
         // store peripheral
         peripheralDevice = peripheral
@@ -282,6 +287,7 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     // read updated values
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
            if characteristic.uuid == BLE_Rx_Characteristic_CBUUID {
+                // cache data, if complete packet, decode and notify
                 if cacheData(data: characteristic.value) {
                     decodeRx()
                 }
@@ -321,34 +327,45 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     private func decodeRx() {
         if let buffer = buffer {
             var data: String! = String(data: buffer, encoding: .utf8)
-            print("Data received: \(data)")
-            // trim leading and trailing brackets
+            print("Data received: \(data!)")
+            // trim leading and trailing brackets and newline
             data.removeFirst()
+            data.removeLast()
             data.removeLast()
             
             let values = data.components(separatedBy: ",")
             
-            if values.count != EXPECTED_ANGLE_COUNT {
-                print("WARNING: Expected \(EXPECTED_ANGLE_COUNT) values but got \(values.count)")
+            if values.count != EXPECTED_VALUES_COUNT + STATUS_FIELDS_COUNT {
+                print("WARNING: Expected \(EXPECTED_VALUES_COUNT + STATUS_FIELDS_COUNT) values but got \(values.count)")
             }
             
             var angles: [Double] = []
                 
-            values.forEach() { val in
-                if let angle = Double(val) {
+            // Parse Angle Values
+            for i in 0..<EXPECTED_VALUES_COUNT {
+                if let angle = Double(values[i]) {
                     angles.append(angle)
                 }
                 else {
-                    print("Could not convert \(val) to Double")
+                    print("Could not convert \(values[i]) to Double")
                 }
             }
             
-            if angles.count == values.count {
+            if angles.count == EXPECTED_VALUES_COUNT {
                 self.angles = angles
+                // Parse Packet No, count dropped packets
+                if let newNo = Int(values[EXPECTED_VALUES_COUNT + STATUS_FIELDS_COUNT - 1]) {
+                    if let prevNo = self.packetNo {
+                        droppedPackets += (newNo - prevNo - 1)
+                    }
+                    self.packetNo = newNo
+                }
             }
             else {
                 print("Not all values could be converted to Float, ignoring message")
             }
+            
+            
         }
     }
     

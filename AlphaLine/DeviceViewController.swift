@@ -310,13 +310,16 @@ class DeviceViewController: UIViewController, UIScrollViewDelegate {
         let initialBattLevel = self.appDelegate?.bluetooth?.subscribeToBatteryLevel(observer: self, block: self.changeBatteryState)
         changeBatteryState(initialBattLevel!, .searching)
         _ = self.appDelegate?.bluetooth?.subscribeToAngles(observer: self, block: self.logAngles)
-        
+            
         // UI Commands
         formatBT()
         formatBattery()
         formatTesting()
         formatNetwork()
         formatBackView()
+        
+        // subscribe datahub to angles
+        _ = self.appDelegate?.bluetooth?.subscribeToAngles(observer: dataHub!, block: dataHub!.updateDrawing)
     }
     
     // MARK: - NavBar
@@ -324,9 +327,7 @@ class DeviceViewController: UIViewController, UIScrollViewDelegate {
         checkTitleBarPosition()
     }
         
-    // subscribe datahub to angles
-    _ = self.appDelegate?.bluetooth?.subscribeToAngles(observer: dataHub!, block: dataHub!.updateDrawing)
-        
+    
     @IBOutlet var titleBar: UINavigationBar!
     @IBOutlet var scrollView: UIScrollView!
     
