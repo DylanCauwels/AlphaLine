@@ -23,7 +23,7 @@
                                 <rect key="frame" x="0.0" y="74" width="375" height="655"/>
                                 <subviews>
                                     <stackView autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="GUE-X3-cwg">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="898"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Device" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E6M-8T-pfl">
                                                 <rect key="frame" x="8" y="0.0" width="359" height="40.666666666666664"/>
@@ -125,47 +125,6 @@
                                                     <constraint firstItem="Cia-Z9-Psw" firstAttribute="centerX" secondItem="A9K-D3-uzM" secondAttribute="centerX" id="xMP-oL-bma"/>
                                                 </constraints>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q3a-F1-4sa">
-                                                <rect key="frame" x="8" y="775" width="359" height="115"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y8g-0L-IwB">
-                                                        <rect key="frame" x="94" y="23" width="100" height="30"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <state key="normal" title="Test BT Status"/>
-                                                        <connections>
-                                                            <action selector="testBT:" destination="BYZ-38-t0r" eventType="touchUpInside" id="prK-P3-DNH"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8FY-l3-vyC">
-                                                        <rect key="frame" x="202" y="24" width="101" height="30"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <state key="normal" title="Test Data Print"/>
-                                                        <connections>
-                                                            <action selector="testData:" destination="BYZ-38-t0r" eventType="touchUpInside" id="JkU-Ds-v6F"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C2o-cK-oAB">
-                                                        <rect key="frame" x="202" y="62" width="100" height="30"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <state key="normal" title="Test BackView"/>
-                                                        <connections>
-                                                            <action selector="testBackView:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lrb-NG-Bvz"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sHR-YP-QD0">
-                                                        <rect key="frame" x="63" y="61" width="131" height="30"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <state key="normal" title="Test Battery Status"/>
-                                                        <connections>
-                                                            <action selector="testBattery:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rdI-nz-75t"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="115" id="eAd-Q5-VHw"/>
-                                                </constraints>
-                                            </view>
                                         </subviews>
                                         <edgeInsets key="layoutMargins" top="0.0" left="8" bottom="8" right="8"/>
                                     </stackView>
@@ -215,7 +174,6 @@
                         <outlet property="loadingMessage" destination="6uI-2G-HVy" id="aTm-IW-TT8"/>
                         <outlet property="progressBar" destination="6Gr-iO-Nh9" id="bFL-h5-oUc"/>
                         <outlet property="scrollView" destination="MYG-xo-7mR" id="AcW-dK-Kwe"/>
-                        <outlet property="testView" destination="q3a-F1-4sa" id="RFp-e4-noJ"/>
                         <outlet property="titleBar" destination="nxZ-3o-kg1" id="hef-gl-azT"/>
                     </connections>
                 </viewController>

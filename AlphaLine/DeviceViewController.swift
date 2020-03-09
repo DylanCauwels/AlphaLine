@@ -314,7 +314,7 @@ class DeviceViewController: UIViewController, UIScrollViewDelegate {
         // UI Commands
         formatBT()
         formatBattery()
-        formatTesting()
+//        formatTesting()
         formatNetwork()
         formatBackView()
         
