@@ -10,7 +10,7 @@ import UIKit
 import CoreBluetooth
 
 // MARK: - Main Storyboard
-class ViewController: UIViewController {
+class DeviceViewController: UIViewController, UIScrollViewDelegate {
     let imageConfiguration = UIImage.SymbolConfiguration(scale: .small)
     
     var appDelegate: AppDelegate?
@@ -248,7 +248,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var dataView: UIView!
 
     func formatNetwork() {
-        dataLabel.font = dataLabel.font.withSize(20)
         self.dataView.layer.borderWidth = 2
         self.dataView.layer.borderColor = UIColor(red:222/255, green:225/255, blue:227/255, alpha: 1).cgColor
         self.dataView.layer.cornerRadius = 10
@@ -318,9 +317,31 @@ class ViewController: UIViewController {
         formatTesting()
         formatNetwork()
         formatBackView()
+    }
+    
+    // MARK: - NavBar
+    override func viewDidAppear(_ animated: Bool) {
+        checkTitleBarPosition()
+    }
         
-        // subscribe datahub to angles
-        _ = self.appDelegate?.bluetooth?.subscribeToAngles(observer: dataHub!, block: dataHub!.updateDrawing)
+    // subscribe datahub to angles
+    _ = self.appDelegate?.bluetooth?.subscribeToAngles(observer: dataHub!, block: dataHub!.updateDrawing)
         
+    @IBOutlet var titleBar: UINavigationBar!
+    @IBOutlet var scrollView: UIScrollView!
+    
+    func checkTitleBarPosition() {
+        if (scrollView.contentOffset.y < 8 ) {
+            self.titleBar?.shadowImage = UIImage()
+            self.titleBar?.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+
+        } else {
+            self.titleBar?.shadowImage = nil
+            self.titleBar?.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        checkTitleBarPosition()
     }
 }

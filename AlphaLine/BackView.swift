@@ -83,10 +83,8 @@ class BackView: UIView {
         if let context = UIGraphicsGetCurrentContext() {
             context.setLineWidth(1.5)
             UIColor(red:225/255, green:225/255, blue:225/255, alpha: 1).set()
-            print(NSLayoutConstraint.Attribute.centerX.rawValue)
-            print(self.width! * 0.5)
             drawLine(start: CGPoint(x: self.width! * 0.25, y: self.height! * 0.85), end: CGPoint(x: self.width! * 0.85, y: self.height! * 0.85))
-            drawLine(start: CGPoint(x: self.width! * 0.55, y: self.height! * 0.1), end: CGPoint(x: self.width! * 0.55, y: self.height! * 0.95))
+            drawLine(start: CGPoint(x: self.width! * 0.5, y: self.height! * 0.1), end: CGPoint(x: self.width! * 0.5, y: self.height! * 0.95))
             context.strokePath()
         }
     }
@@ -98,7 +96,6 @@ class BackView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-//        print("redrawing view")
         drawOutlines()
         for (index, point) in data!.enumerated(){
             drawCircle(center: point, radius: 5, color: colors![index], width: 1.5)

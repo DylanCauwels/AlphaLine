@@ -3,26 +3,33 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		C345D94E23EC97B200504223 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C345D94D23EC97B200504223 /* BluetoothManager.swift */; };
 		C345D95023ECA06900504223 /* BluetoothManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C345D94F23ECA06900504223 /* BluetoothManagerTests.swift */; };
-		C36EC4CC23F1C1C000FA1276 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E3123EB637400D4AAE6 /* ViewController.swift */; };
+		C36EC4CC23F1C1C000FA1276 /* DeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E3123EB637400D4AAE6 /* DeviceViewController.swift */; };
 		C36EC4CD23F1C26800FA1276 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C345D94D23EC97B200504223 /* BluetoothManager.swift */; };
 		C36EC51123FE3B0600FA1276 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36EC51023FE3B0600FA1276 /* Observable.swift */; };
 		C36EC51323FE3C0A00FA1276 /* ObservableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36EC51223FE3C0A00FA1276 /* ObservableObject.swift */; };
+		EB273776241591BA00557899 /* LogoAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB273775241591BA00557899 /* LogoAnimationView.swift */; };
+		EB2737782415934C00557899 /* LaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2737772415934C00557899 /* LaunchScreen.swift */; };
+		EB27377C2415940600557899 /* SwiftyGif in Frameworks */ = {isa = PBXBuildFile; productRef = EB27377B2415940600557899 /* SwiftyGif */; };
+		EB27377E2415A08400557899 /* LoadingGif.gif in Resources */ = {isa = PBXBuildFile; fileRef = EB27377D2415A08400557899 /* LoadingGif.gif */; };
+		EB962A7F2412FF830052436A /* RoutineCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB962A7E2412FF830052436A /* RoutineCollectionViewCell.swift */; };
+		EB962A81241309010052436A /* HistoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB962A80241309010052436A /* HistoryCollectionViewCell.swift */; };
+		EBA1B1B3240C8A2500E086BF /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA1B1B2240C8A2500E086BF /* HistoryViewController.swift */; };
 		EBC31E2E23EB637400D4AAE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E2D23EB637400D4AAE6 /* AppDelegate.swift */; };
 		EBC31E3023EB637400D4AAE6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E2F23EB637400D4AAE6 /* SceneDelegate.swift */; };
-		EBC31E3223EB637400D4AAE6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E3123EB637400D4AAE6 /* ViewController.swift */; };
+		EBC31E3223EB637400D4AAE6 /* DeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E3123EB637400D4AAE6 /* DeviceViewController.swift */; };
 		EBC31E3523EB637400D4AAE6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBC31E3323EB637400D4AAE6 /* Main.storyboard */; };
 		EBC31E3723EB637600D4AAE6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBC31E3623EB637600D4AAE6 /* Assets.xcassets */; };
 		EBC31E3A23EB637600D4AAE6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBC31E3823EB637600D4AAE6 /* LaunchScreen.storyboard */; };
 		EBC31E4523EB637600D4AAE6 /* AlphaLineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E4423EB637600D4AAE6 /* AlphaLineTests.swift */; };
 		EBC31E5023EB637600D4AAE6 /* AlphaLineUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E4F23EB637600D4AAE6 /* AlphaLineUITests.swift */; };
 		EBC31E5E23F62ED500D4AAE6 /* BackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E5D23F62ED500D4AAE6 /* BackView.swift */; };
-		EBC31E6423F896A300D4AAE6 /* CustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E6323F896A300D4AAE6 /* CustomViewController.swift */; };
+		EBC31E6423F896A300D4AAE6 /* RoutineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E6323F896A300D4AAE6 /* RoutineViewController.swift */; };
 		EBC31E6623FB1D5000D4AAE6 /* DataHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC31E6523FB1D5000D4AAE6 /* DataHub.swift */; };
 /* End PBXBuildFile section */
 
@@ -48,10 +55,17 @@
 		C345D94F23ECA06900504223 /* BluetoothManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManagerTests.swift; sourceTree = "<group>"; };
 		C36EC51023FE3B0600FA1276 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = SOURCE_ROOT; };
 		C36EC51223FE3C0A00FA1276 /* ObservableObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableObject.swift; sourceTree = SOURCE_ROOT; };
+		EB273775241591BA00557899 /* LogoAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoAnimationView.swift; sourceTree = "<group>"; };
+		EB2737772415934C00557899 /* LaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreen.swift; sourceTree = "<group>"; };
+		EB27377D2415A08400557899 /* LoadingGif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = LoadingGif.gif; path = ../../../../LoadingGif.gif; sourceTree = "<group>"; };
+		EB27377F2415A08A00557899 /* LoadingGif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = LoadingGif.gif; sourceTree = "<group>"; };
+		EB962A7E2412FF830052436A /* RoutineCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineCollectionViewCell.swift; sourceTree = "<group>"; };
+		EB962A80241309010052436A /* HistoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		EBA1B1B2240C8A2500E086BF /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		EBC31E2A23EB637400D4AAE6 /* AlphaLine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlphaLine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBC31E2D23EB637400D4AAE6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EBC31E2F23EB637400D4AAE6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		EBC31E3123EB637400D4AAE6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		EBC31E3123EB637400D4AAE6 /* DeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceViewController.swift; sourceTree = "<group>"; };
 		EBC31E3423EB637400D4AAE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EBC31E3623EB637600D4AAE6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EBC31E3923EB637600D4AAE6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -63,7 +77,7 @@
 		EBC31E4F23EB637600D4AAE6 /* AlphaLineUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlphaLineUITests.swift; sourceTree = "<group>"; };
 		EBC31E5123EB637600D4AAE6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EBC31E5D23F62ED500D4AAE6 /* BackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackView.swift; sourceTree = "<group>"; };
-		EBC31E6323F896A300D4AAE6 /* CustomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewController.swift; sourceTree = "<group>"; };
+		EBC31E6323F896A300D4AAE6 /* RoutineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineViewController.swift; sourceTree = "<group>"; };
 		EBC31E6523FB1D5000D4AAE6 /* DataHub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataHub.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -72,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB27377C2415940600557899 /* SwiftyGif in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,6 +112,7 @@
 			children = (
 				C36EC51023FE3B0600FA1276 /* Observable.swift */,
 				C36EC51223FE3C0A00FA1276 /* ObservableObject.swift */,
+				EB27377D2415A08400557899 /* LoadingGif.gif */,
 			);
 			path = ObserverDesignPattern;
 			sourceTree = "<group>";
@@ -125,16 +141,22 @@
 			isa = PBXGroup;
 			children = (
 				C36EC50F23FE3AC900FA1276 /* ObserverDesignPattern */,
-				EBC31E6323F896A300D4AAE6 /* CustomViewController.swift */,
-				EBC31E5D23F62ED500D4AAE6 /* BackView.swift */,
-				EBC31E6523FB1D5000D4AAE6 /* DataHub.swift */,
 				EBC31E2D23EB637400D4AAE6 /* AppDelegate.swift */,
+				EB27377F2415A08A00557899 /* LoadingGif.gif */,
 				EBC31E2F23EB637400D4AAE6 /* SceneDelegate.swift */,
-				EBC31E3123EB637400D4AAE6 /* ViewController.swift */,
+				EBA1B1B2240C8A2500E086BF /* HistoryViewController.swift */,
+				EBC31E6323F896A300D4AAE6 /* RoutineViewController.swift */,
+				EBC31E3123EB637400D4AAE6 /* DeviceViewController.swift */,
+				EBC31E6523FB1D5000D4AAE6 /* DataHub.swift */,
+				EBC31E5D23F62ED500D4AAE6 /* BackView.swift */,
 				C345D94D23EC97B200504223 /* BluetoothManager.swift */,
 				EBC31E3323EB637400D4AAE6 /* Main.storyboard */,
+				EB962A7E2412FF830052436A /* RoutineCollectionViewCell.swift */,
+				EB962A80241309010052436A /* HistoryCollectionViewCell.swift */,
 				EBC31E3623EB637600D4AAE6 /* Assets.xcassets */,
 				EBC31E3823EB637600D4AAE6 /* LaunchScreen.storyboard */,
+				EB273775241591BA00557899 /* LogoAnimationView.swift */,
+				EB2737772415934C00557899 /* LaunchScreen.swift */,
 				EBC31E3B23EB637600D4AAE6 /* Info.plist */,
 			);
 			path = AlphaLine;
@@ -175,6 +197,9 @@
 			dependencies = (
 			);
 			name = AlphaLine;
+			packageProductDependencies = (
+				EB27377B2415940600557899 /* SwiftyGif */,
+			);
 			productName = AlphaLine;
 			productReference = EBC31E2A23EB637400D4AAE6 /* AlphaLine.app */;
 			productType = "com.apple.product-type.application";
@@ -247,6 +272,9 @@
 				Base,
 			);
 			mainGroup = EBC31E2123EB637400D4AAE6;
+			packageReferences = (
+				EB27377A2415940600557899 /* XCRemoteSwiftPackageReference "SwiftyGif" */,
+			);
 			productRefGroup = EBC31E2B23EB637400D4AAE6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -265,6 +293,7 @@
 			files = (
 				EBC31E3A23EB637600D4AAE6 /* LaunchScreen.storyboard in Resources */,
 				EBC31E3723EB637600D4AAE6 /* Assets.xcassets in Resources */,
+				EB27377E2415A08400557899 /* LoadingGif.gif in Resources */,
 				EBC31E3523EB637400D4AAE6 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,14 +320,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				C36EC51123FE3B0600FA1276 /* Observable.swift in Sources */,
-				EBC31E3223EB637400D4AAE6 /* ViewController.swift in Sources */,
-				EBC31E6423F896A300D4AAE6 /* CustomViewController.swift in Sources */,
+				EBC31E3223EB637400D4AAE6 /* DeviceViewController.swift in Sources */,
+				EBC31E6423F896A300D4AAE6 /* RoutineViewController.swift in Sources */,
+				EBA1B1B3240C8A2500E086BF /* HistoryViewController.swift in Sources */,
 				EBC31E5E23F62ED500D4AAE6 /* BackView.swift in Sources */,
 				EBC31E6623FB1D5000D4AAE6 /* DataHub.swift in Sources */,
+				EB962A7F2412FF830052436A /* RoutineCollectionViewCell.swift in Sources */,
 				EBC31E2E23EB637400D4AAE6 /* AppDelegate.swift in Sources */,
 				EBC31E3023EB637400D4AAE6 /* SceneDelegate.swift in Sources */,
+				EB273776241591BA00557899 /* LogoAnimationView.swift in Sources */,
 				C345D94E23EC97B200504223 /* BluetoothManager.swift in Sources */,
 				C36EC51323FE3C0A00FA1276 /* ObservableObject.swift in Sources */,
+				EB2737782415934C00557899 /* LaunchScreen.swift in Sources */,
+				EB962A81241309010052436A /* HistoryCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,7 +341,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C36EC4CD23F1C26800FA1276 /* BluetoothManager.swift in Sources */,
-				C36EC4CC23F1C1C000FA1276 /* ViewController.swift in Sources */,
+				C36EC4CC23F1C1C000FA1276 /* DeviceViewController.swift in Sources */,
 				EBC31E4523EB637600D4AAE6 /* AlphaLineTests.swift in Sources */,
 				C345D95023ECA06900504223 /* BluetoothManagerTests.swift in Sources */,
 			);
@@ -630,6 +664,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EB27377A2415940600557899 /* XCRemoteSwiftPackageReference "SwiftyGif" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kirualex/SwiftyGif.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EB27377B2415940600557899 /* SwiftyGif */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EB27377A2415940600557899 /* XCRemoteSwiftPackageReference "SwiftyGif" */;
+			productName = SwiftyGif;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EBC31E2223EB637400D4AAE6 /* Project object */;
 }
