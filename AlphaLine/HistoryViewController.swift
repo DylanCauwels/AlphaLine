@@ -34,23 +34,26 @@ class HistoryViewController: UIViewController, UIScrollViewDelegate, UICollectio
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        def = self.titleBar!.shadowImage
-        self.titleBar?.shadowImage = UIImage()
-        self.titleBar?.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+//        checkTitleBarPosition()
     }
     
     var def:UIImage?
     
     @IBOutlet var titleBar: UINavigationBar!
+    @IBOutlet var collectionView: UICollectionView!
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if (scrollView.contentOffset.y < 16 ) {
+    func checkTitleBarPosition() {
+        if (collectionView.contentOffset.y < 8 ) {
             self.titleBar?.shadowImage = UIImage()
             self.titleBar?.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
 
         } else {
-            self.titleBar?.shadowImage = def
+            self.titleBar?.shadowImage = nil
             self.titleBar?.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
         }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        checkTitleBarPosition()
     }
 }

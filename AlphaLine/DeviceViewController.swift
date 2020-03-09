@@ -310,28 +310,28 @@ class DeviceViewController: UIViewController, UIScrollViewDelegate {
         formatTesting()
         formatNetwork()
         formatBackView()
-        
     }
     
     // MARK: - NavBar
     override func viewDidAppear(_ animated: Bool) {
-        def = self.titleBar!.shadowImage
-        self.titleBar?.shadowImage = UIImage()
-        self.titleBar?.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+        checkTitleBarPosition()
     }
-    
-    var def:UIImage?
-    
+        
     @IBOutlet var titleBar: UINavigationBar!
+    @IBOutlet var scrollView: UIScrollView!
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    func checkTitleBarPosition() {
         if (scrollView.contentOffset.y < 8 ) {
             self.titleBar?.shadowImage = UIImage()
             self.titleBar?.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
 
         } else {
-            self.titleBar?.shadowImage = def
+            self.titleBar?.shadowImage = nil
             self.titleBar?.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
         }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        checkTitleBarPosition()
     }
 }

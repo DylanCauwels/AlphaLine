@@ -17,8 +17,7 @@ class RoutineViewController: UIViewController, UIScrollViewDelegate, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        print("making Item at " + String(indexPath.item))
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! RoutineCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RoutineCell", for: indexPath) as! RoutineCollectionViewCell
         cell.centerLabel.text = items[indexPath.item]
         return cell
     }
@@ -33,23 +32,26 @@ class RoutineViewController: UIViewController, UIScrollViewDelegate, UICollectio
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        def = self.titleBar!.shadowImage
-        self.titleBar?.shadowImage = UIImage()
-        self.titleBar?.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+        checkTitleBarPosition()
     }
     
     var def:UIImage?
     
     @IBOutlet var titleBar: UINavigationBar!
+    @IBOutlet var scrollView: UIScrollView!
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if (scrollView.contentOffset.y < 16 ) {
+    func checkTitleBarPosition() {
+        if (scrollView.contentOffset.y < 8 ) {
             self.titleBar?.shadowImage = UIImage()
             self.titleBar?.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
 
         } else {
-            self.titleBar?.shadowImage = def
+            self.titleBar?.shadowImage = nil
             self.titleBar?.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
         }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        checkTitleBarPosition()
     }
 }

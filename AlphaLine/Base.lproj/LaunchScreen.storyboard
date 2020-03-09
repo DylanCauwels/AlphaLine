@@ -15,16 +15,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LoadingScreen_Blue" translatesAutoresizingMaskIntoConstraints="NO" id="xri-KS-1Uy">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LoadingStill" translatesAutoresizingMaskIntoConstraints="NO" id="1VC-Bn-zle">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="xri-KS-1Uy" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="CX9-1F-xD5"/>
-                            <constraint firstItem="xri-KS-1Uy" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="HED-8U-gbP"/>
-                            <constraint firstItem="xri-KS-1Uy" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="HUy-wB-TwK"/>
-                            <constraint firstAttribute="bottom" secondItem="xri-KS-1Uy" secondAttribute="bottom" id="WDS-np-Frb"/>
+                            <constraint firstAttribute="bottom" secondItem="1VC-Bn-zle" secondAttribute="bottom" id="JWP-Vj-LeO"/>
+                            <constraint firstItem="1VC-Bn-zle" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="XGI-bg-cVN"/>
+                            <constraint firstItem="1VC-Bn-zle" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="bsV-ne-Yuc"/>
+                            <constraint firstItem="1VC-Bn-zle" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="wFh-ga-TYZ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -35,6 +35,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LoadingScreen_Blue" width="375" height="812"/>
+        <image name="LoadingStill" width="1243" height="2689"/>
     </resources>
 </document>
