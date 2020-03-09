@@ -214,8 +214,9 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate
     
     // look at peripherals with our service
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        
-        print("Discovered \(peripheral.name!)")
+        if let name = peripheral.name {
+            print("Discovered \(name)")
+        }
         decodePeripheralState(peripheralState: peripheral.state)
         // store peripheral
         peripheralDevice = peripheral

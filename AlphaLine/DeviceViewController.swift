@@ -138,7 +138,9 @@ class DeviceViewController: UIViewController, UIScrollViewDelegate {
             batteryTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: self.batteryImage, repeats: true)
             batteryLabel.text = nil
         case .high:
-            stopTimer(timer: batteryTimer!)
+            if let timer = batteryTimer {
+                stopTimer(timer: timer)
+            }
             formatBatteryImage(color: .green, symbol: "battery.100")
             setLabel("100  |  95  |  98  |  96  |  92  |  95  |  97")
         case .low:
@@ -146,7 +148,9 @@ class DeviceViewController: UIViewController, UIScrollViewDelegate {
             batteryTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(blink), userInfo: self.batteryImage, repeats: true)
             setLabel("23  |  25  |  30  |  21  |  27  |  26  |  30")
         case .dead:
-            stopTimer(timer: batteryTimer!)
+            if let timer = batteryTimer {
+                stopTimer(timer: timer)
+            }
             formatBatteryImage(color: .red, symbol: "battery.0")
             batteryLabel.text = nil
         }
@@ -325,6 +329,7 @@ class DeviceViewController: UIViewController, UIScrollViewDelegate {
     // MARK: - NavBar
     override func viewDidAppear(_ animated: Bool) {
         checkTitleBarPosition()
+        
     }
         
     
